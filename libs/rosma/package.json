@@ -1,0 +1,24 @@
+{
+  "name": "rosma",
+  "version": "0.9.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shahabyazdi/rosma.git"
+  },
+  "author": "Shahab Yazdi <sh.yazdi@gmail.com>",
+  "homepage": "https://shahabyazdi.github.io/rosma/",
+  "description": "combined javascript proxy and observer pattern to optimize your react component.",
+  "keywords": [
+    "rosma",
+    "react",
+    "state",
+    "management"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/shahabyazdi/rosma/issues"
+  },
+  "peerDependencies": {
+    "react": ">=16.8.0"
+  }
+}
