@@ -2,11 +2,11 @@ import { ElementType, ReactNode, useState, useEffect, useRef } from 'react';
 import { observer } from '../observer';
 
 export type State<T> = {
-  withChange: (callback: (state: T & State<T>) => ReactNode) => ElementType;
+  withState: (callback: (state: T & State<T>) => ReactNode) => ElementType;
 } & Record<string, any>;
 
 export function useObserver<T>(initialValue = undefined): T & State<T> {
-  const state = useState();
+  const state = useState({});
   const ref = useRef({ keys: new Set<string>() });
 
   useEffect(() => {
@@ -16,7 +16,11 @@ export function useObserver<T>(initialValue = undefined): T & State<T> {
 
     const array = [];
 
-    keys.forEach((key) => array.push(observer.subscribe(key, state[1])));
+    keys.forEach((key) => array.push(observer.subscribe(key, listener)));
+
+    function listener(value) {
+      state[1]({ value });
+    }
 
     return () => {
       array.forEach((unsubscribe) => unsubscribe());
@@ -34,12 +38,12 @@ export function useObserver<T>(initialValue = undefined): T & State<T> {
         if (/^set[a-z](.+)?/.test(prop)) {
           const key = prop.replace(/^set./, (w) => w.charAt(3).toLowerCase());
 
-          setValue(key);
+          if (typeof initialValue !== 'undefined') setValue(key);
 
           return (value) => {
             observer.set({ [key]: getValue(value, key) });
           };
-        } else if (/^withchange$/.test(prop)) {
+        } else if (/^withstate$/.test(prop)) {
           return function (callback) {
             return function Element() {
               return callback(useObserver());

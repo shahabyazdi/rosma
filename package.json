@@ -2,7 +2,11 @@
   "name": "react-observer-state-management",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "website": "nx serve website",
+    "build": "nx run rosma:build:production",
+    "release": "cd dist/libs/rosma && npm publish"
+  },
   "private": true,
   "dependencies": {
     "@emotion/react": "11.10.5",

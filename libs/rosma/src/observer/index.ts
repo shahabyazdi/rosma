@@ -1,6 +1,6 @@
-type Listener = (state: any) => void;
+export type Listener = (value: any) => void;
 
-type State = {
+export type CacheData = {
   setter?: string;
   getter?: string;
   value?: any;
@@ -8,15 +8,17 @@ type State = {
 };
 
 class Observer {
-  #cache: Record<string, State> = {};
+  #cache: Record<string, CacheData> = {};
 
   #createCache(key: string) {
     if (!this.#cache[key]) this.#cache[key] = { listeners: new Set() };
   }
 
-  subscribe(key: string, listener: Listener = () => {}) {
-    if (typeof listener !== "function") {
-      warn(["listener must be a function"]);
+  subscribe(key: string, listener: Listener) {
+    if (typeof listener !== 'function') {
+      warn(['listener must be a function']);
+
+      return () => false;
     }
 
     this.#createCache(key);
@@ -28,8 +30,8 @@ class Observer {
     return () => listeners.delete(listener);
   }
 
-  set(object: Record<string, any>) {
-    if (typeof object !== "object") return;
+  set<T>(object: T | Record<string, any>) {
+    if (typeof object !== 'object') return;
 
     Object.entries(object).forEach(([key, value]) => {
       this.#createCache(key);
@@ -38,24 +40,28 @@ class Observer {
     });
   }
 
-  get(key: string) {
-    return this.#cache?.[key]?.value;
+  get(key: string | string[]) {
+    return typeof key === 'string'
+      ? this.#cache?.[key]?.value
+      : Array.isArray(key)
+      ? Object.fromEntries(key.map((key) => [key, observer.get(key)]))
+      : undefined;
   }
 
   #notify(key: string) {
     const listeners = this.#cache[key].listeners;
-    const state = this.#cache[key].value;
+    const value = this.#cache[key].value;
 
-    listeners.forEach((listener) => listener(state));
+    listeners.forEach((listener) => listener(value));
   }
 
   isValid(key: string) {
-    return typeof this.#cache[key] !== "undefined";
+    return typeof this.#cache[key] !== 'undefined';
   }
 }
 
 export const observer = new Observer();
 
 function warn(message: string[]) {
-  console.warn(message.join("\n"));
+  console.warn(message.join('\n'));
 }

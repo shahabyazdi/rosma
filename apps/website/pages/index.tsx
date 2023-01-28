@@ -6,9 +6,9 @@ type State = {
 };
 
 export function Index() {
-  const { setCount, withChange } = useObserver<State>(0);
+  const { setCount, withState } = useObserver<State>(0);
 
-  const Button = withChange(({ count }) => (
+  const Button = withState(({ count }) => (
     <button onClick={() => setCount(count + 1)}>{count}</button>
   ));
 
