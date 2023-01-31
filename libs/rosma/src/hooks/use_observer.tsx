@@ -30,7 +30,7 @@ export function useObserver<T>(initialValue = undefined): State<T> {
   return new Proxy(
     {},
     {
-      get(_, prop: string) {
+      get(target, prop: string) {
         const { keys } = ref.current;
 
         prop = prop.toLowerCase();
@@ -44,12 +44,10 @@ export function useObserver<T>(initialValue = undefined): State<T> {
             observer.set({ [key]: getValue(value, key) });
           };
         } else if ('withstate' === prop) {
-          return function (callback) {
-            return function Element() {
-              return callback(useObserver());
-            };
-          };
+          return withState;
         } else {
+          if (target[prop]) return target[prop];
+
           keys.add(prop);
 
           return setValue(prop);
@@ -73,4 +71,19 @@ export function useObserver<T>(initialValue = undefined): State<T> {
   function getValue(value, key: string) {
     return typeof value === 'function' ? value(observer.get(key)) : value;
   }
+}
+
+function withState(callback) {
+  return function Element(props) {
+    const state = useObserver();
+
+    Object.defineProperties(
+      state,
+      Object.fromEntries(
+        Object.entries(props).map(([key, value]) => [key, { value }])
+      )
+    );
+
+    return callback(state);
+  };
 }
