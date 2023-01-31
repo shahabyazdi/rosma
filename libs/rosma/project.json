@@ -19,17 +19,18 @@
         "tsConfig": "libs/rosma/tsconfig.lib.json",
         "project": "libs/rosma/package.json",
         "entryFile": "libs/rosma/src/index.ts",
-        "external": ["react/jsx-runtime", "core-js"],
-        "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
+        "external": ["react/jsx-runtime"],
+        "rollupConfig": "libs/rosma/rollup.config.js",
         "compiler": "babel",
         "assets": [
           {
-            "glob": "libs/rosma/README.md",
+            "glob": "README.md",
             "input": ".",
             "output": "."
           }
         ],
-        "format": ["esm", "cjs"]
+        "format": ["esm", "cjs"],
+        "generateExportsField": true
       }
     },
     "test": {

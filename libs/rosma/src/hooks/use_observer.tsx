@@ -1,11 +1,11 @@
 import { ElementType, ReactNode, useState, useEffect, useRef } from 'react';
 import { observer } from '../observer';
 
-export type State<T> = {
-  withState: (callback: (state: T & State<T>) => ReactNode) => ElementType;
+export type State<T> = T & {
+  withState: (callback: (state: State<T>) => ReactNode) => ElementType;
 } & Record<string, any>;
 
-export function useObserver<T>(initialValue = undefined): T & State<T> {
+export function useObserver<T>(initialValue = undefined): State<T> {
   const state = useState({});
   const ref = useRef({ keys: new Set<string>() });
 
@@ -35,15 +35,15 @@ export function useObserver<T>(initialValue = undefined): T & State<T> {
 
         prop = prop.toLowerCase();
 
-        if (/^set[a-z](.+)?/.test(prop)) {
-          const key = prop.replace(/^set./, (w) => w.charAt(3).toLowerCase());
+        if (prop.startsWith('set')) {
+          const key = prop.replace('set', '');
 
           if (typeof initialValue !== 'undefined') setValue(key);
 
           return (value) => {
             observer.set({ [key]: getValue(value, key) });
           };
-        } else if (/^withstate$/.test(prop)) {
+        } else if ('withstate' === prop) {
           return function (callback) {
             return function Element() {
               return callback(useObserver());
@@ -56,7 +56,7 @@ export function useObserver<T>(initialValue = undefined): T & State<T> {
         }
       },
     }
-  ) as T & State<T>;
+  ) as State<T>;
 
   function setValue(key: string) {
     let value = observer.get(key);
