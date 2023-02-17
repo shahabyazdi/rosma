@@ -1,9 +1,6 @@
-import { ElementType, ReactNode, useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { observer } from '../observer';
-
-export type State<T> = T & {
-  withState: (callback: (state: State<T>) => ReactNode) => ElementType;
-} & Record<string, any>;
+import { State } from '../types';
 
 export function useObserver<T>(initialValue = undefined): State<T> {
   const state = useState({});
@@ -43,8 +40,6 @@ export function useObserver<T>(initialValue = undefined): State<T> {
           return (value) => {
             observer.set({ [key]: getValue(value, key) });
           };
-        } else if ('withstate' === prop) {
-          return withState;
         } else {
           if (target[prop]) return target[prop];
 
@@ -71,19 +66,4 @@ export function useObserver<T>(initialValue = undefined): State<T> {
   function getValue(value, key: string) {
     return typeof value === 'function' ? value(observer.get(key)) : value;
   }
-}
-
-function withState(callback) {
-  return function Element(props) {
-    const state = useObserver();
-
-    Object.defineProperties(
-      state,
-      Object.fromEntries(
-        Object.entries(props).map(([key, value]) => [key, { value }])
-      )
-    );
-
-    return callback(state);
-  };
 }

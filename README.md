@@ -144,11 +144,9 @@ export default function Note() {
 If you want the entire main component not to be re-rendered with state changes, you can easily split the elements of the main component into smaller components using the withState method.
 
 ```javascript
-import { useObserver } from 'rosma';
+import { withState } from 'rosma';
 
 export default function Note() {
-  const { withState } = useObserver();
-
   const Input = withState(({ note = '', setNote }) => (
     <input
       value={note}
@@ -191,11 +189,9 @@ export default function Note() {
 To avoid extra rendering, you can read the values directly from the observer. In the example above, the Button component is re-rendered every time that the 'note' variable is changed. But you can avoid this extra rendering by reading the 'note' value from the observer.
 
 ```javascript
-import { observer, useObserver } from 'rosma';
+import { observer, withState } from 'rosma';
 
 export default function Note() {
-  const { withState } = useObserver();
-
   const Input = withState(({ note = '', setNote }) => (
     <input
       value={note}
