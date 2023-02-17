@@ -1,4 +1,4 @@
-import { useObserver } from 'rosma';
+import { useObserver, withState } from 'rosma';
 
 type State = {
   count: number;
@@ -6,7 +6,7 @@ type State = {
 };
 
 export function Index() {
-  const { setCount, withState } = useObserver<State>(0);
+  const { setCount } = useObserver<State>(0);
 
   const Button = withState(({ count }) => (
     <button onClick={() => setCount(count + 1)}>{count}</button>

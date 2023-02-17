@@ -23,13 +23,17 @@ class Observer {
     return () => listeners.delete(listener);
   }
 
-  set<T>(object: T | Record<string, any>) {
+  set<T>(
+    object: T | Record<string, any>,
+    { silent }: { silent?: boolean } = { silent: false }
+  ) {
     if (typeof object !== 'object') return;
 
     Object.entries(object).forEach(([key, value]) => {
       this.#createCache(key);
       this.#cache[key].value = value;
-      this.#notify(key);
+
+      if (!silent) this.#notify(key);
     });
   }
 
