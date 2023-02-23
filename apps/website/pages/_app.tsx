@@ -1,6 +1,9 @@
-import { AppProps } from 'next/app';
 import Head from 'next/head';
-import MDXProvider from '../src/provider/mdx';
+import MainLayout from '../src/layouts/main_layout';
+import MDXProvider from '../src/provider/mdx_provider';
+import DirectionProvider from '../src/provider/direction_provider';
+import { AppProps } from 'next/app';
+import { observer } from 'rosma';
 
 import '../public/css/global.css';
 import 'node_modules/prismjs/themes/prism.css';
@@ -8,14 +11,20 @@ import 'node_modules/prismjs/themes/prism.css';
 function CustomApp({ Component, pageProps }: AppProps) {
   const data = pageProps.data || {};
 
+  observer.set({ translate }, { silent: true });
+
   return (
     <>
       <Head>
-        <title>Welcome to website!</title>
+        <title>Rosma</title>
       </Head>
-      <MDXProvider translate={translate}>
-        <Component {...pageProps} />
-      </MDXProvider>
+      <DirectionProvider>
+        <MainLayout>
+          <MDXProvider>
+            <Component {...pageProps} />
+          </MDXProvider>
+        </MainLayout>
+      </DirectionProvider>
     </>
   );
 

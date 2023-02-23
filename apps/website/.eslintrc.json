@@ -24,7 +24,8 @@
   ],
   "rules": {
     "@next/next/no-html-link-for-pages": "off",
-    "@typescript-eslint/no-var-requires": "off"
+    "@typescript-eslint/no-var-requires": "off",
+    "@nrwl/nx/enforce-module-boundaries": "off"
   },
   "env": {
     "jest": true

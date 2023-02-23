@@ -1,8 +1,27 @@
-[lang='fa'] {
-  direction: rtl;
+[lang='en'] * {
+  font-family: Poppins;
+}
+
+[lang='fa'] * {
+  font-family: Vazirmatn;
 }
 
 pre {
   border-radius: 7px;
   box-shadow: inset 0 0 5px #ccc;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.menu {
+  display: none;
+}
+
+@media (max-width: 700px) {
+  .menu {
+    display: block;
+  }
 }

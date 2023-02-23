@@ -39,7 +39,7 @@ class Observer {
 
   get(key: string | string[]) {
     return typeof key === 'string'
-      ? this.#cache?.[key]?.value
+      ? this.#cache?.[key.toLowerCase()]?.value
       : Array.isArray(key)
       ? Object.fromEntries(key.map((key) => [key, observer.get(key)]))
       : undefined;

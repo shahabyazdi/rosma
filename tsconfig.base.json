@@ -15,7 +15,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "rosma": ["libs/rosma/src/index.ts"]
+      "rosma": ["libs/rosma/src/index.ts"],
+      "@/components/*": ["apps/website/src/components/*"]
     }
   },
   "exclude": ["node_modules", "tmp"]

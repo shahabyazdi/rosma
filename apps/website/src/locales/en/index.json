@@ -1,1 +1,6 @@
-{}
+{
+  "common": {
+    "en": "English",
+    "fa": "Persian"
+  }
+}
