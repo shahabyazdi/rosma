@@ -1,18 +1,16 @@
 import { useObserver, withState } from 'rosma';
+import { getLocale } from 'apps/website/src/utils/get_locale';
 
-type State = {
-  count: number;
-  setCount: (count: number) => void;
-};
+<Index />
 
 export function Index() {
-  const { setCount } = useObserver<State>(0);
-
+  const { setCount } = useObserver(0);
   const Button = withState(({ count }) => (
     <button onClick={() => setCount(count + 1)}>{count}</button>
   ));
-
   return <Button />;
 }
 
-export default Index;
+export function getStaticProps({ locale }) {
+  return { props: { data: getLocale(locale) } };
+}

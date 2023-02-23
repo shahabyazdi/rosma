@@ -1,0 +1,8 @@
+[lang='fa'] {
+  direction: rtl;
+}
+
+pre {
+  border-radius: 7px;
+  box-shadow: inset 0 0 5px #ccc;
+}
