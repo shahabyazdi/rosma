@@ -2,14 +2,14 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { sidebar } from '../sidebar/data';
 import { useObserver } from 'rosma';
-import { DocsPage, DocsPagination, StyledMian, StyledDoc } from './styled';
+import { DocsPage, DocsPagination, StyledMain, StyledDoc } from './styled';
 
 export default function Mian({ children }) {
   return (
-    <StyledMian>
+    <StyledMain>
       <StyledDoc>{children}</StyledDoc>
       <Pagination />
-    </StyledMian>
+    </StyledMain>
   );
 }
 
