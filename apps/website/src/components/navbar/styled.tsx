@@ -11,4 +11,5 @@ export const StyledNavbar = styled.nav({
   alignItems: 'center',
   padding: '0 15px',
   gap: 10,
+  backgroundColor: 'white',
 });

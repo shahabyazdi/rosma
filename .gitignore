@@ -40,3 +40,9 @@ Thumbs.db
 
 # Next.js
 .next
+
+# with_translate
+/apps/website/pages/*
+!/apps/website/pages/_app.tsx
+!/apps/website/pages/_document.tsx
+

@@ -1,0 +1,67 @@
+import { useObserver } from 'rosma';
+
+# Setting different initial values
+
+initialValues.description
+
+**1. Define initial values separately:**
+
+```javascript
+import { useObserver } from 'rosma';
+
+export default function Counts() {
+  const { count, setCount } = useObserver(10);
+  const { count1, setCount1 } = useObserver(20);
+
+  return (
+    <>
+      <button onClick={() => setCount(count + 1)}>{count}</button>
+      <button onClick={() => setCount1(count1 + 1)}>{count1}</button>
+    </>
+  );
+}
+```
+
+## Demo
+
+<Counts />
+
+---
+
+initialValues.separate.explain
+
+**2. Define initial values at once:**
+
+initialValues.once.description
+
+```javascript
+import { observer, useObserver } from 'rosma';
+
+observer.set({ count: 10, count1: 20 });
+
+export default function Counts() {
+  const { count, setCount, count1, setCount1 } = useObserver();
+
+  return (
+    <>
+      <button onClick={() => setCount(count + 1)}>{count}</button>
+      <button onClick={() => setCount1(count1 + 1)}>{count1}</button>
+    </>
+  );
+}
+```
+
+initialValues.once.explain
+
+**Keywords**: initialValues.keywords
+
+export function Counts() {
+  const { count3, setCount3 } = useObserver(10);
+  const { count4, setCount4 } = useObserver(20);
+  return (
+    <>
+      <button onClick={() => setCount3(count3 + 1)}>{count3}</button>
+      <button onClick={() => setCount4(count4 + 1)}>{count4}</button>
+    </>
+  );
+}

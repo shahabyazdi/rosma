@@ -1,15 +1,14 @@
 import Head from 'next/head';
 import MainLayout from '../src/layouts/main_layout';
 import MDXProvider from '../src/provider/mdx_provider';
-import DirectionProvider from '../src/provider/direction_provider';
+import LocaleProvider from '../src/provider/locale_provider';
 import { AppProps } from 'next/app';
 import { observer } from 'rosma';
 
 import '../public/css/global.css';
-import 'node_modules/prismjs/themes/prism.css';
 
 function CustomApp({ Component, pageProps }: AppProps) {
-  const data = pageProps.data || {};
+  const { data = {}, locales, locale } = pageProps;
 
   observer.set({ translate }, { silent: true });
 
@@ -18,13 +17,13 @@ function CustomApp({ Component, pageProps }: AppProps) {
       <Head>
         <title>Rosma</title>
       </Head>
-      <DirectionProvider>
+      <LocaleProvider locales={locales} locale={locale}>
         <MainLayout>
           <MDXProvider>
             <Component {...pageProps} />
           </MDXProvider>
         </MainLayout>
-      </DirectionProvider>
+      </LocaleProvider>
     </>
   );
 

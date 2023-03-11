@@ -1,4 +1,4 @@
-[lang='en'] * {
+* {
   font-family: Poppins;
 }
 
@@ -9,6 +9,15 @@
 pre {
   border-radius: 7px;
   box-shadow: inset 0 0 5px #ccc;
+  background-color: rgba(175, 184, 193, 0.2) !important;
+}
+
+.remark-highlight * {
+  direction: ltr;
+}
+
+.token.operator {
+  background-color: transparent !important;
 }
 
 a {

@@ -5,16 +5,20 @@ export const StyledSidebar = styled.aside<{ active: string }>(({ active }) => ({
   left: 0,
   top: 55,
   bottom: 0,
-  width: 210,
-  borderRight: '1px solid #ccc',
+  width: 250,
+  boxShadow: '2px 5px 5px #ccc',
   backgroundColor: 'white',
   '@media(max-width:700px)': {
-    left: active === 'false' ? -210 : 0,
+    left: active === 'false' ? -250 : 0,
     transition: '0.4s',
   },
 }));
 
-export const SideBarList = styled.ul({ listStyle: 'none' });
+export const SideBarList = styled.ul({
+  listStyle: 'none',
+  margin: 0,
+  padding: '2px 15px',
+});
 
 export const SideBarItem = styled.li<{ active: string }>(({ active }) => ({
   fontWeight: active === 'true' ? 'bold' : 'normal',

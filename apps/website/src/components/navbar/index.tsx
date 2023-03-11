@@ -1,6 +1,5 @@
 import { ReactNode, useState } from 'react';
-import locales from '../../locales/locales.json';
-import Link, { LinkProps } from 'next/link';
+import Link, { LinkProps } from '@/components/link';
 import Github from '../../assets/github';
 import NPM from '../../assets/npm';
 import { Menu2 } from 'tabler-icons-react';
@@ -59,7 +58,7 @@ function NavbarItem({
 }
 
 function Languages({ translate }) {
-  const { locale, pathname } = useRouter();
+  const { locale, pathname, locales } = useRouter();
   const [isActive, setIsActive] = useState(false);
 
   return (

@@ -1,10 +1,10 @@
 //@ts-check
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const { withNx } = require('@nrwl/next/plugins/with-nx');
 const nextMdx = require('@next/mdx');
-const locales = require('./src/locales/locales.json');
 const remarkPrism = require('remark-prism');
+const { withNx } = require('@nrwl/next/plugins/with-nx');
+const { withTranslate } = require('../../with_translate');
 
 const withMdx = nextMdx({
   extension: /\.mdx?$/,
@@ -24,7 +24,6 @@ const nextConfig = {
     svgr: false,
   },
   pageExtensions: ['md', 'mdx', 'tsx', 'ts', 'jsx', 'js'],
-  i18n: { locales, defaultLocale: 'en' },
 };
 
-module.exports = withMdx(withNx(nextConfig));
+module.exports = withMdx(withTranslate(withNx(nextConfig)));

@@ -1,13 +1,20 @@
-import Link from 'next/link';
+import Link from '@/components/link';
 import { useRouter } from 'next/router';
 import { sidebar } from '../sidebar/data';
 import { useObserver } from 'rosma';
-import { DocsPage, DocsPagination, StyledMain, StyledDoc } from './styled';
+import { SidebarItem } from '../sidebar';
+import {
+  DocsPage,
+  DocsPagination,
+  StyledMain,
+  StyledDoc,
+  DocsPageTitle,
+} from './styled';
 
 export default function Mian({ children }) {
   return (
     <StyledMain>
-      <StyledDoc>{children}</StyledDoc>
+      <StyledDoc className="markdown-body">{children}</StyledDoc>
       <Pagination />
     </StyledMain>
   );
@@ -16,16 +23,17 @@ export default function Mian({ children }) {
 function Pagination() {
   const { pathname } = useRouter();
   const { translate } = useObserver();
-  const index = sidebar.findIndex(({ path }) => pathname == path);
-  const next = sidebar[index + 1];
-  const previous = sidebar[index - 1];
+  const array = flatSidebar(sidebar);
+  const index = array.findIndex(({ path }) => pathname == path);
+  const next = array[index + 1];
+  const previous = array[index - 1];
 
   return index >= 0 ? (
     <DocsPagination>
       <DocsPage>
         {previous && (
           <>
-            {translate('Previous')}:{' '}
+            <DocsPageTitle>{translate('Previous')}: </DocsPageTitle>
             <Link href={previous.path}>{translate(previous.name)}</Link>
           </>
         )}
@@ -33,11 +41,25 @@ function Pagination() {
       <DocsPage>
         {next && (
           <>
-            {translate('Next')}:{' '}
+            <DocsPageTitle>{translate('Next')}: </DocsPageTitle>
             <Link href={next.path}>{translate(next.name)}</Link>
           </>
         )}
       </DocsPage>
     </DocsPagination>
   ) : null;
+}
+
+function flatSidebar(items: Array<SidebarItem>) {
+  let array = [];
+
+  items.forEach((item) => {
+    if (Array.isArray(item.items)) {
+      array = array.concat(flatSidebar(item.items));
+    } else {
+      array.push(item);
+    }
+  });
+
+  return array;
 }

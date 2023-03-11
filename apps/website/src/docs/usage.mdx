@@ -1,0 +1,84 @@
+import { useObserver } from 'rosma';
+
+# Counter App
+
+usage.counter.description
+
+```javascript
+import { useObserver } from 'rosma';
+
+export default function Counter() {
+  const { count, setCount } = useObserver(0);
+
+  return (
+    <button onClick={() => setCount(count + 1)}>
+      <span>the count is: </span>
+      {count}
+    </button>
+  );
+}
+```
+
+usage.counter.alt
+
+```jsx
+import { withState } from 'rosma';
+
+function Counter({ count = 0, setCount }) {
+  return <button onClick={() => setCount(count + 1)}>{count}</button>;
+}
+
+export default withState(Counter);
+```
+
+## Demo
+
+<Counter />
+
+---
+
+usage.counter.explain
+
+## No Order for Variables
+
+usage.order.description
+
+```jsx
+import { useObserver } from 'rosma';
+
+export default function Counter() {
+  const { setCount, count } = useObserver(0);
+
+  return <button onClick={() => setCount(count + 1)}>{count}</button>;
+}
+```
+
+usage.order.explain
+
+## Case Insensitive Variables
+
+usage.caseinsensitive.description
+
+```jsx
+import { useObserver } from 'rosma';
+
+export default function Counter() {
+  const { CouNt, setcOunT } = useObserver(0);
+
+  return <button onClick={() => setcOunT(CouNt + 1)}>{CouNt}</button>;
+}
+```
+
+usage.caseinsensitive.explain
+
+**Keywords**: usage.keywords
+
+export function Counter() {
+  const { count, setCount } = useObserver(0);
+  return (
+    <button onClick={() => setCount(count + 1)}>
+      <span>the count is: </span>
+      {count}
+    </button>
+  );
+}

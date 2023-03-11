@@ -1,0 +1,40 @@
+import { useObserver } from 'rosma';
+
+# Multiple destructuring
+
+multipleDestructuring.description
+
+```javascript
+import { useObserver } from 'rosma';
+
+export default function Counts() {
+  const { count, setCount, count1, setCount1 } = useObserver(0);
+
+  return (
+    <>
+      <button onClick={() => setCount(count + 1)}>{count}</button>
+      <button onClick={() => setCount1(count1 + 1)}>{count1}</button>
+    </>
+  );
+}
+```
+
+## Demo
+
+<Counts />
+
+---
+
+multipleDestructuring.explain
+
+**Keywords**: multipleDestructuring.keywords
+
+export function Counts() {
+  const { count1, setCount1, count2, setCount2 } = useObserver(0);
+  return (
+    <>
+      <button onClick={() => setCount1(count1 + 1)}>{count1}</button>
+      <button onClick={() => setCount2(count2 + 1)}>{count2}</button>
+    </>
+  );
+}
