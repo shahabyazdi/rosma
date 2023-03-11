@@ -6,7 +6,8 @@
     "website": "nx serve website",
     "build": "nx run rosma:build:production",
     "build-website": "nx run website:export:production",
-    "release": "cd dist/libs/rosma && npm publish"
+    "release": "cd dist/libs/rosma && npm publish",
+    "deploy": "npm run build-website && cp .nojekyll dist/apps/website/exported/.nojekyll && gh-pages -d dist/apps/website/exported -t true"
   },
   "private": true,
   "dependencies": {
@@ -53,6 +54,7 @@
     "eslint-plugin-react": "7.31.11",
     "eslint-plugin-react-hooks": "4.6.0",
     "fs-extra": "^11.1.0",
+    "gh-pages": "^5.0.0",
     "jest": "28.1.1",
     "jest-environment-jsdom": "28.1.1",
     "nx": "15.6.2",

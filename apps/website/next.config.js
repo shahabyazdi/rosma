@@ -24,6 +24,7 @@ const nextConfig = {
     svgr: false,
   },
   pageExtensions: ['md', 'mdx', 'tsx', 'ts', 'jsx', 'js'],
+  basePath: '/rosma',
 };
 
 module.exports = withMdx(withTranslate(withNx(nextConfig)));
