@@ -24,7 +24,7 @@ const nextConfig = {
     svgr: false,
   },
   pageExtensions: ['md', 'mdx', 'tsx', 'ts', 'jsx', 'js'],
-  basePath: '/rosma',
+  basePath: process.env.NODE_ENV === 'development' ? '' : '/rosma',
 };
 
 module.exports = withMdx(withTranslate(withNx(nextConfig)));

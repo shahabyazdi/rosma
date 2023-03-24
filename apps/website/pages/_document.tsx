@@ -21,6 +21,10 @@ export default function Document(props: DocumentProps) {
           href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.2.0/github-markdown-light.min.css"
           rel="stylesheet"
         />
+        <meta
+          name="google-site-verification"
+          content="eN9hWwtvlYdXL_37ZU2ML8AUY8685Fw3O98T5vidr-4"
+        />
       </Head>
       <body>
         <Main />

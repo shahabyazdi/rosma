@@ -4,6 +4,7 @@ import { observer, useObserver } from 'rosma';
 import { sidebar } from './data';
 import { useRouter } from 'next/router';
 import { SideBarItem, SideBarList, StyledSidebar } from './styled';
+import useClickOutside from '../../hooks/use_click_outside';
 
 export type SidebarItem = {
   name: string;
@@ -21,22 +22,16 @@ export default function Sidebar() {
 
   const { translate, isSidebarActive, setIsSidebarActive } = useObserver();
 
-  useEffect(() => {
-    window.addEventListener('click', handleClickOutside);
-    window.addEventListener('resize', handleresize);
+  useClickOutside(ref, () => setIsSidebarActive(false));
 
-    function handleClickOutside(event) {
-      if (!ref.current?.contains?.(event.target)) {
-        setIsSidebarActive(false);
-      }
-    }
+  useEffect(() => {
+    window.addEventListener('resize', handleresize);
 
     function handleresize() {
       if (observer.get('isSidebarActive')) setIsSidebarActive(false);
     }
 
     return () => {
-      window.removeEventListener('click', handleClickOutside);
       window.removeEventListener('resize', handleresize);
     };
   }, []);

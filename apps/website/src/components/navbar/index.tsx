@@ -1,4 +1,4 @@
-import { ReactNode, useState } from 'react';
+import { ReactNode, useRef, useState } from 'react';
 import Link, { LinkProps } from '@/components/link';
 import Github from '../../assets/github';
 import NPM from '../../assets/npm';
@@ -7,6 +7,7 @@ import { useRouter } from 'next/router';
 import { StyledNavbar } from './styled';
 import { useObserver } from 'rosma';
 import { StyledDropdown, StyledDropdownItem } from '../sidebar/styled';
+import useClickOutside from '../../hooks/use_click_outside';
 
 export default function Navbar() {
   const { translate, setIsSidebarActive } = useObserver();
@@ -60,13 +61,20 @@ function NavbarItem({
 function Languages({ translate }) {
   const { locale, pathname, locales } = useRouter();
   const [isActive, setIsActive] = useState(false);
+  const ref = useRef();
+
+  useClickOutside(ref, close);
 
   return (
-    <div onMouseOver={() => setIsActive(true)} style={{ cursor: 'default' }}>
+    <div
+      ref={ref}
+      onMouseOver={() => setIsActive(true)}
+      style={{ cursor: 'default' }}
+    >
       {translate(locale)}
 
       <StyledDropdown
-        onMouseLeave={() => setIsActive(false)}
+        onMouseLeave={close}
         style={{ visibility: isActive ? 'visible' : 'hidden' }}
       >
         {locales.map((locale, index) => (
@@ -77,4 +85,8 @@ function Languages({ translate }) {
       </StyledDropdown>
     </div>
   );
+
+  function close() {
+    setIsActive(false);
+  }
 }

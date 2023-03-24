@@ -97,7 +97,7 @@ function translate(string, locale = 'en') {
     string = string.replace(item, object[item] || item);
   });
 
-  array = string.match(/\w+((\.\w+)+)?$/gm) || [];
+  array = string.match(/\w+((\.\w+)+)?/gm) || [];
 
   array.forEach((item) => {
     let value = getNestedValue(object, item);
@@ -119,6 +119,7 @@ function appendStaticProps(string, locale) {
     string =
       `import { getLocale } from 'apps/website/src/utils/get_locale';
 import { getLocales } from 'with_translate';
+import MainLayout from 'apps/website/src/layouts/main_layout';
 
 ` + string;
   }
@@ -132,6 +133,10 @@ import { getLocales } from 'with_translate';
     string =
       string +
       `
+export default ({ children }) => (<MainLayout meta={${
+        string.includes('export const meta') ? 'meta' : '{}'
+      }}>{children}</MainLayout>);
+
 export function getStaticProps({ locale = "${locale}" }) {
   return { props: { data: getLocale(locale), locales: getLocales(), locale } };
 }`;

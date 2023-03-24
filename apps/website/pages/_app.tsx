@@ -1,5 +1,3 @@
-import Head from 'next/head';
-import MainLayout from '../src/layouts/main_layout';
 import MDXProvider from '../src/provider/mdx_provider';
 import LocaleProvider from '../src/provider/locale_provider';
 import { AppProps } from 'next/app';
@@ -13,18 +11,11 @@ function CustomApp({ Component, pageProps }: AppProps) {
   observer.set({ translate }, { silent: true });
 
   return (
-    <>
-      <Head>
-        <title>Rosma</title>
-      </Head>
-      <LocaleProvider locales={locales} locale={locale}>
-        <MainLayout>
-          <MDXProvider>
-            <Component {...pageProps} />
-          </MDXProvider>
-        </MainLayout>
-      </LocaleProvider>
-    </>
+    <LocaleProvider locales={locales} locale={locale}>
+      <MDXProvider>
+        <Component {...pageProps} />
+      </MDXProvider>
+    </LocaleProvider>
   );
 
   function translate(string: string) {
