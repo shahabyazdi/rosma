@@ -1,8 +1,12 @@
 import { CacheData, Listener } from '../types';
 
-class Observer {
+class Observer<T = Record<string, any>> {
   #cache: Record<string, CacheData> = {};
   #listeners = new Map<Listener, Set<string>>();
+
+  constructor(initialValues?: T) {
+    this.#setValues(initialValues);
+  }
 
   #createCache(key: string) {
     if (!this.#cache[key]) this.#cache[key] = { listeners: new Set() };
@@ -40,10 +44,18 @@ class Observer {
     };
   }
 
-  set<T>(
-    object: T | Record<string, any>,
+  set<State = Record<string, any>>(
+    object: State | T,
     { silent }: { silent?: boolean } = { silent: false }
   ) {
+    if (typeof object !== 'object') return;
+
+    const keys = this.#setValues(object);
+
+    if (!silent && keys) this.#notify(keys);
+  }
+
+  #setValues(object) {
     if (typeof object !== 'object') return;
 
     const keys = Object.keys(object);
@@ -53,7 +65,7 @@ class Observer {
       this.#cache[key].value = object[key];
     });
 
-    if (!silent) this.#notify(keys);
+    return keys;
   }
 
   get(key: string | string[]) {

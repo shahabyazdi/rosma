@@ -1,9 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
 import { Observer, observer as globalObserver } from '../observer';
+import { WithSetters } from '../types';
 
-export function useObserver<T extends Record<string, any>>(
+export function useObserver<T = Record<string, any>>(
   input = undefined
-): T {
+): WithSetters<T> {
   const isObserverInstance = input instanceof Observer,
     initialValue = isObserverInstance ? undefined : input,
     observer = isObserverInstance ? input : globalObserver,
@@ -49,7 +50,7 @@ export function useObserver<T extends Record<string, any>>(
         }
       },
     }
-  ) as T;
+  ) as WithSetters<T>;
 
   function setValue(key: string) {
     let value = observer.get(key);

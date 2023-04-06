@@ -1,13 +1,17 @@
-import { memo } from 'react';
+import { memo, ReactElement } from 'react';
 import { useObserver } from './use_observer';
 import { Observer } from '../observer';
+import { WithSetters } from '../types';
 
-export function withState<T extends Record<string, any>>(
-  callback,
+export function withState<
+  StateProps extends Record<string, any>,
+  ComponentProps extends Record<string, any> = Record<string, any>
+>(
+  callback: (state?: WithSetters<StateProps> & ComponentProps) => ReactElement,
   observer?: Observer
 ) {
   function Element(props) {
-    const state = useObserver<T>(observer);
+    const state = useObserver<StateProps>(observer);
 
     Object.defineProperties(
       state,
@@ -16,8 +20,8 @@ export function withState<T extends Record<string, any>>(
       )
     );
 
-    return callback(state);
+    return callback(state as WithSetters<StateProps> & ComponentProps);
   }
 
-  return memo<T>(Element);
+  return memo<ComponentProps>(Element);
 }
