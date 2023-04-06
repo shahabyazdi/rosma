@@ -7,7 +7,8 @@
     "build": "nx run rosma:build:production",
     "build-website": "nx run website:export:production && next-sitemap --config sitemap.config.js",
     "release": "cd dist/libs/rosma && npm publish",
-    "deploy": "npm run build-website && cp .nojekyll dist/apps/website/exported/.nojekyll && gh-pages -d dist/apps/website/exported -t true"
+    "deploy": "npm run build-website && cp .nojekyll dist/apps/website/exported/.nojekyll && gh-pages -d dist/apps/website/exported -t true",
+    "test": "nx run rosma:test"
   },
   "private": true,
   "dependencies": {

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import Link from '@/components/link';
 import { observer, useObserver } from 'rosma';
 import { sidebar } from './data';
@@ -19,21 +19,18 @@ type ItemsProps = {
 
 export default function Sidebar() {
   const ref = useRef<HTMLDivElement>();
-
   const { translate, isSidebarActive, setIsSidebarActive } = useObserver();
 
-  useClickOutside(ref, () => setIsSidebarActive(false));
+  const closeSidebar = useCallback(() => {
+    if (observer.get('isSidebarActive')) setIsSidebarActive(false);
+  }, []);
+
+  useClickOutside(ref, closeSidebar);
 
   useEffect(() => {
-    window.addEventListener('resize', handleresize);
+    window.addEventListener('resize', closeSidebar);
 
-    function handleresize() {
-      if (observer.get('isSidebarActive')) setIsSidebarActive(false);
-    }
-
-    return () => {
-      window.removeEventListener('resize', handleresize);
-    };
+    return () => window.removeEventListener('resize', closeSidebar);
   }, []);
 
   return (

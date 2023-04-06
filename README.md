@@ -146,34 +146,34 @@ If you want the entire main component not to be re-rendered with state changes, 
 ```javascript
 import { withState } from 'rosma';
 
+const Input = withState(({ note = '', setNote }) => (
+  <input
+    value={note}
+    onChange={(e) => setNote(e.target.value)}
+    placeholder="write something"
+  />
+));
+
+const Button = withState(({ note, setNotes, setNote }) => (
+  <button
+    onClick={() => {
+      setNotes((notes = []) => notes.concat(note));
+      setNote('');
+    }}
+  >
+    Add
+  </button>
+));
+
+const List = withState(({ notes = [] }) => (
+  <ul>
+    {notes.map((note, index) => (
+      <li key={index}>{note}</li>
+    ))}
+  </ul>
+));
+
 export default function Note() {
-  const Input = withState(({ note = '', setNote }) => (
-    <input
-      value={note}
-      onChange={(e) => setNote(e.target.value)}
-      placeholder="write something"
-    />
-  ));
-
-  const Button = withState(({ note, setNotes, setNote }) => (
-    <button
-      onClick={() => {
-        setNotes((notes = []) => notes.concat(note));
-        setNote('');
-      }}
-    >
-      Add
-    </button>
-  ));
-
-  const List = withState(({ notes = [] }) => (
-    <ul>
-      {notes.map((note, index) => (
-        <li key={index}>{note}</li>
-      ))}
-    </ul>
-  ));
-
   return (
     <>
       <Input />
@@ -191,50 +191,32 @@ To avoid extra rendering, you can read the values directly from the observer. In
 ```javascript
 import { observer, withState } from 'rosma';
 
-export default function Note() {
-  const Input = withState(({ note = '', setNote }) => (
-    <input
-      value={note}
-      onChange={(e) => setNote(e.target.value)}
-      placeholder="write something"
-    />
-  ));
+const Input = withState(({ note = '', setNote }) => (
+  <input
+    value={note}
+    onChange={(e) => setNote(e.target.value)}
+    placeholder="write something"
+  />
+));
 
-  const Button = withState(({ setNotes, setNote }) => (
-    <button
-      onClick={() => {
-        setNotes((notes = []) => notes.concat(observer.get('note')));
-        setNote('');
-      }}
-    >
-      Add
-    </button>
-  ));
+const Button = withState(({ setNotes, setNote }) => (
+  <button
+    onClick={() => {
+      setNotes((notes = []) => notes.concat(observer.get('note')));
+      setNote('');
+    }}
+  >
+    Add
+  </button>
+));
 
-  const List = withState(({ notes = [] }) => (
-    <ul>
-      {notes.map((note, index) => (
-        <li key={index}>{note}</li>
-      ))}
-    </ul>
-  ));
-
-  return (
-    <>
-      <Input />
-      <Button />
-      <List />
-    </>
-  );
-}
-```
-
-### Separate everything
-
-Given that all state variables can be used globally across all components in your application, you can define the parent component's parts outside of it.
-
-```javascript
-import { observer, useObserver } from 'rosma';
+const List = withState(({ notes = [] }) => (
+  <ul>
+    {notes.map((note, index) => (
+      <li key={index}>{note}</li>
+    ))}
+  </ul>
+));
 
 export default function Note() {
   return (
@@ -243,45 +225,6 @@ export default function Note() {
       <Button />
       <List />
     </>
-  );
-}
-
-function Input() {
-  const { note, setNote } = useObserver('');
-
-  return (
-    <input
-      value={note}
-      onChange={(e) => setNote(e.target.value)}
-      placeholder="write something"
-    />
-  );
-}
-
-function Button() {
-  const { setNotes, setNote } = useObserver();
-
-  return (
-    <button
-      onClick={() => {
-        setNotes((notes) => notes.concat(observer.get('note')));
-        setNote('');
-      }}
-    >
-      Add
-    </button>
-  );
-}
-
-function List() {
-  const { notes } = useObserver([]);
-
-  return (
-    <ul>
-      {notes.map((note, index) => (
-        <li key={index}>{note}</li>
-      ))}
-    </ul>
   );
 }
 ```

@@ -1,27 +1,27 @@
 import { useState, useEffect, useRef } from 'react';
-import { observer } from '../observer';
-import { State } from '../types';
+import { Observer, observer as globalObserver } from '../observer';
 
-export function useObserver<T>(initialValue = undefined): State<T> {
-  const state = useState({});
-  const ref = useRef({ keys: new Set<string>() });
+export function useObserver<T extends Record<string, any>>(
+  input = undefined
+): T {
+  const isObserverInstance = input instanceof Observer,
+    initialValue = isObserverInstance ? undefined : input,
+    observer = isObserverInstance ? input : globalObserver,
+    state = useState({}),
+    ref = useRef({ keys: new Set<string>() });
 
   useEffect(() => {
     const { keys } = ref.current;
 
     if (keys.size === 0) return;
 
-    const array = [];
-
-    keys.forEach((key) => array.push(observer.subscribe(key, listener)));
+    const unsubscribe = observer.subscribe(Array.from(keys), listener);
 
     function listener(value) {
       state[1]({ value });
     }
 
-    return () => {
-      array.forEach((unsubscribe) => unsubscribe());
-    };
+    return () => unsubscribe();
   }, []);
 
   return new Proxy(
@@ -49,7 +49,7 @@ export function useObserver<T>(initialValue = undefined): State<T> {
         }
       },
     }
-  ) as State<T>;
+  ) as T;
 
   function setValue(key: string) {
     let value = observer.get(key);
