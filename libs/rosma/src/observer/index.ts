@@ -18,7 +18,7 @@ class Observer<T = Record<string, any>> {
     }
   }
 
-  subscribe(key: string | string[], listener: Listener) {
+  subscribe<K extends keyof T>(key: K | K[], listener: Listener) {
     if (typeof listener !== 'function') {
       warn(['listener must be a function']);
 
@@ -29,7 +29,7 @@ class Observer<T = Record<string, any>> {
 
     this.#addListener(listener);
 
-    key.forEach((key) => {
+    (key as string[]).forEach((key) => {
       this.#createCache(key);
       this.#listeners.get(listener).add(key);
       this.#cache[key].listeners.add(listener);
@@ -44,8 +44,8 @@ class Observer<T = Record<string, any>> {
     };
   }
 
-  set<State = Record<string, any>>(
-    object: State | T,
+  set<StateType>(
+    object: Partial<StateType | T>,
     { silent }: { silent?: boolean } = { silent: false }
   ) {
     if (typeof object !== 'object') return;
@@ -68,11 +68,11 @@ class Observer<T = Record<string, any>> {
     return keys;
   }
 
-  get(key: string | string[]) {
+  get<K extends keyof T>(key: K | Array<K>) {
     return typeof key === 'string'
       ? this.#cache?.[key.toLowerCase()]?.value
       : Array.isArray(key)
-      ? Object.fromEntries(key.map((key) => [key, observer.get(key)]))
+      ? Object.fromEntries(key.map((key) => [key, observer.get(key as string)]))
       : undefined;
   }
 

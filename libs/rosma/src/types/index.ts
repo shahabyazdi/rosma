@@ -7,8 +7,12 @@ export type CacheData = {
   listeners?: Set<Listener>;
 };
 
+export type Setter<T> = T | ((prev: T) => T);
+
 export type WithSetters<T> = T extends object
   ? {
-      [K in keyof T as `set${Capitalize<string & K>}`]: (value: T[K]) => void;
+      [K in keyof T as `set${Capitalize<string & K>}`]: (
+        value: Setter<T[K]>
+      ) => void;
     } & T
   : T;
