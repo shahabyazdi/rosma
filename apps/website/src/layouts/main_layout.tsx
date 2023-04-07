@@ -19,7 +19,7 @@ export default function MainLayout({ children, meta }) {
     <>
       <Head>
         <title>
-          {`${translate('Rosma')} | ${translate(sidebarItem.name)}`}
+          {`${translate('Rosma')} | ${translate(sidebarItem?.name)}`}
         </title>
         <meta name="description" content={meta.description || description} />
         <meta property="og:type" content="website" />

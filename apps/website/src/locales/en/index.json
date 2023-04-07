@@ -142,5 +142,85 @@
         "Front-end development"
       ]
     ]
+  },
+  "observer": {
+    "description": [
+      "Observer is a tool that allows you to declare global state variables and update them from anywhere in your application.",
+      "In addition to updating state values, you can also observe them using Observer to be notified when they change.",
+      "By default, Rosma uses a single instance of the Observer class. However, you can use multiple instances of the Observer class to better manage your project. This will be explained in the next sections.",
+      "The Observer class provides several methods, which are listed below:",
+      "- observer.get \n- observer.set \n- observer.isValid \n- observer.subscribe"
+    ],
+    "get": {
+      "description": "The `observer.get` method is used to retrieve values from the state. You can use this method to get one or more values simultaneously.",
+      "singleValue": [
+        "To retrieve a single value from the state, you must pass the key of the variable as an argument to the `get` method.",
+        "For example, suppose the value of the `foo` in the state is equal to `'bar'`. In this case, you can retrieve the value of the `foo` and assign it to a variable as follows:"
+      ],
+      "multipleValues": [
+        "If you want to retrieve more than one value from the state, you must pass the desired keys as an array to the `get` method. In this case, the value returned from the `get` method is an object.",
+        "For example, suppose our state contains values of `foo` equal to `'bar'` and `baz` equal to `'qux'`. To retrieve the values of `foo` and `baz` at the same time, you can use the following code:"
+      ],
+      "explain": "You can also destructure the returned object to assign each value to a separate variable, like this:"
+    },
+    "set": {
+      "description": [
+        "The `set` method is used to change or add one or more values in the state. When a value in the state is changed using the `set` method, all components that use that value will be rerendered. However, it's also possible to change a value silently, without triggering a rerender of the components that use it.",
+        "_**Note** that if you set a value silently, and a component using that value is later rerendered for any other reasons, the new value will be received from the state._"
+      ],
+      "demo": [
+        "In this example, the `DisplayTime` component retrieves the `time` value from the `Observer` state using `useObserver` and displays it in a paragraph element.",
+        "The component also includes three buttons that allow the user to update the `time` value in different ways. The first button calls the `setTime` method to update the value using the `useObserver` hook. The second button calls the `observer.set` method to update the value directly in the `Observer` state. The third button calls the `observer.set` method with the `silent` option to update the value silently, without triggering a rerender of any components that use the `time` value."
+      ]
+    },
+    "example": {
+      "description": [
+        "This code is a simple example of using global state management with the Observer tool. It allows the user to open and close modal components and displays them in the app."
+      ],
+      "app": "The `App` component is the entry point of the application. It contains a button that triggers the opening of a modal and renders the `Modals` component that shows all open modals. The `newModal` function is imported from `actions.ts` to handle the opening of the new modal.",
+      "modal": "The `Modals` component uses the `useObserver` hook to get the `modals` array from the state, which holds the data for each open modal. The `map` function is used to render a `Modal` component for each open modal. The `Modal` component is responsible for rendering the modal component with its `title`, `body`, and `close` button.",
+      "actions": "The `actions` file exports two functions: `newModal` and `closeModal`. Both of these functions use the `observer` instance provided by the Rosma library to get and set the `modals` array in the global state. The `newModal` function creates a new modal object with a unique `id`, `title`, and `body` and adds it to the `modals` array. The `closeModal` function filters out the modal with the given `id` from the `modals` array."
+    },
+    "isValid": {
+      "description": [
+        "`observer.get` checks whether a given `key` exists in the state or not. it gets a string as the `key` and determines whether that variable is defined in the state or not."
+      ]
+    },
+    "subscribe": {
+      "description": [
+        "The `subscribe` method is utilized to monitor changes in one or more variables in the `state`. This method requires two input parameters:",
+        "1. The desired `key` or `keys` that you want to observe.",
+        "2. A `listener` that will execute when the desired `key` or `keys` have changed.",
+        "The method returns an `unsubscribe` function, allowing you to stop listening to state changes when needed. It can be used within `useEffect` or outside of your React component, depending on your needs. If you need to monitor the changes of multiple variables at the same time, you can provide them as an **`array`** and pass the as the first parameter. However, note that in this case, the desired values will be passed to the listener function as an **`object`**.",
+        "We will talk more about subscribe in the next sections."
+      ],
+      "demo": [
+        "This code imports the `observer` and `useObserver` from the `rosma` library. It then `subscribes` to changes of a variable named myVar by calling `observer.subscribe` and passing in the name of the variable and a listener function that will be called whenever the variable changes.",
+        "The `ObserverTest` component uses `useObserver` to get the `setMyVar` function, which can be called to update the value of `myVar`. The component renders a button that, when clicked, calls `setMyVar` with a new date object as its argument. When `myVar` changes, the `listener` function is called and an alert is displayed with the updated value of `myVar`.",
+        "If the user clicks on the `unsubscribe` button. The `unsubscribe` method is executed and the `listener` function is no longer called with the `myVar` changes."
+      ]
+    },
+    "keywords": [
+      [
+        "Observer",
+        "global state variables",
+        "update state",
+        "observe state",
+        "multiple instances",
+        "observer.get",
+        "observer.set",
+        "observer.isValid",
+        "observer.subscribe",
+        "retrieve values",
+        "get single value",
+        "get multiple values",
+        "change or add values",
+        "silently",
+        "Demo",
+        "modals example",
+        "app.tsx",
+        "modals.tsx"
+      ]
+    ]
   }
 }

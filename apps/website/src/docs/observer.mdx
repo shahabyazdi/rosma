@@ -1,0 +1,249 @@
+import { observer, useObserver } from 'rosma';
+import { DisplayTime } from '@/components/examples/observer.set';
+import { App } from '@/components/examples/modals';
+import { ObserverTest } from '@/components/examples/observer.subscribe';
+
+export const meta = {
+  keywords: 'observer.keywords',
+};
+
+# Observer
+
+observer.description
+
+## observer.get
+
+observer.get.description
+
+### Getting a Single Value
+
+observer.get.singleValue
+
+```javascript
+import { observer } from 'rosma';
+
+const foo = observer.get('foo');
+
+console.log(foo); // bar
+```
+
+### Getting Multiple Values
+
+observer.get.multipleValues
+
+```javascript
+import { observer } from 'rosma';
+
+const values = observer.get(['foo', 'baz']);
+
+console.log(values); // { foo: 'bar', baz: 'qux' }
+```
+
+observer.get.explain
+
+```javascript
+import { observer } from 'rosma';
+
+const { foo, baz } = observer.get(['foo', 'baz']);
+
+console.log(foo, baz); // 'bar', 'qux'
+```
+
+## observer.set
+
+observer.set.description
+
+### Demo
+
+```javascript
+import { observer, useObserver } from 'rosma';
+
+export function DisplayTime() {
+  const { time, setTime } = useObserver('');
+
+  return (
+    <div>
+      <p>Time is: {time}</p>
+      <Button onClick={() => setTime(getTime())}>
+        Update time with setter method
+      </Button>
+      <Button onClick={() => observer.set({ time: getTime() })}>
+        Update time with observer.set
+      </Button>
+      <Button
+        onClick={() => observer.set({ time: getTime() }, { silent: true })}
+      >
+        Update time silently
+      </Button>
+    </div>
+  );
+}
+
+function getTime() {
+  return new Date().toLocaleTimeString();
+}
+
+function Button(props) {
+  return <button {...props} style={{ display: 'block' }} />;
+}
+```
+
+<DisplayTime />
+<br />
+
+observer.set.demo
+
+## Modals Example
+
+observer.example.description
+
+**app.tsx**
+
+observer.example.app
+
+```javascript
+import Modals from './modals';
+import { newModal } from './actions';
+
+export function App() {
+  return (
+    <>
+      <button
+        onClick={() => newModal({ title: 'Modal title', body: 'Modal body' })}
+      >
+        Open Modal
+      </button>
+      <Modals />
+    </>
+  );
+}
+```
+
+**modals.tsx**
+
+observer.example.modal
+
+```javascript
+import { useObserver } from 'rosma';
+import { closeModal } from './actions';
+
+export default function Modals() {
+  const { modals } = useObserver([]);
+
+  return modals.map((modal, index) => <Modal key={index} {...modal} />);
+}
+
+function Modal({ title, body, id }) {
+  return (
+    <div
+      style={{
+        backgroundColor: 'white',
+        boxShadow: '0 0 5px #ccc',
+        minWidth: '300px',
+        position: 'fixed',
+        left: '50%',
+        top: '50%',
+        transform: 'translate(-50%, -50%)',
+        borderRadius: '7px',
+      }}
+    >
+      <div
+        style={{
+          display: 'flex',
+          padding: '10px',
+          borderBottom: '1px solid #ccc',
+          gap: '5px',
+        }}
+      >
+        <span>{title}</span>
+        <span>#{id}</span>
+        <div style={{ flex: 1 }} />
+        <button onClick={() => closeModal(id)}>x</button>
+      </div>
+      <div style={{ padding: '10px' }}>{body}</div>
+    </div>
+  );
+}
+```
+
+**actions.ts**
+
+observer.example.actions
+
+```javascript
+import { observer } from 'rosma';
+
+export function newModal({ title, body }) {
+  const modals = observer.get('modals') || [];
+
+  const modal = {
+    id: modals.length + 1,
+    title,
+    body,
+  };
+
+  modals.push(modal);
+
+  observer.set({ modals });
+}
+
+export function closeModal(id) {
+  const modals = observer.get('modals') || [];
+
+  observer.set({ modals: modals.filter((modal) => modal.id !== id) });
+}
+```
+
+### Demo
+
+<App />
+
+## observer.isValid
+
+observer.isValid.description
+
+```javascript
+import { observe } from 'rosma';
+
+observer.isValid('myVariable'); // false
+
+observer.set({ myVariable: 'something' });
+
+observer.isValid('myVariable'); // true
+```
+
+## observer.subscribe
+
+observer.subscribe.description
+
+### Demo
+
+<ObserverTest />
+
+<br />
+<br />
+
+```javascript
+import { observer, useObserver } from 'rosma';
+
+const unsubscribe = observer.subscribe('myVar', listener);
+
+function listener(myVar) {
+  alert('myVar changed! ' + myVar);
+}
+
+export function ObserverTest() {
+  const { setMyVar } = useObserver();
+
+  return (
+    <>
+      <button onClick={() => setMyVar(new Date())}>Click me</button>
+      <button onClick={unsubscribe}>Unsubscribe</button>
+    </>
+  );
+}
+```
+
+observer.subscribe.demo
+
+**Keywords**: observer.keywords

@@ -25,11 +25,13 @@ class Observer<T = Record<string, any>> {
       return () => false;
     }
 
-    if (typeof key === 'string') key = [key];
+    if (!Array.isArray(key)) key = [key];
 
     this.#addListener(listener);
 
-    (key as string[]).forEach((key) => {
+    const keys = key.map((key) => key.toString().toLowerCase());
+
+    keys.forEach((key) => {
       this.#createCache(key);
       this.#listeners.get(listener).add(key);
       this.#cache[key].listeners.add(listener);
@@ -38,8 +40,8 @@ class Observer<T = Record<string, any>> {
     return () => {
       this.#listeners.delete(listener);
 
-      (key as string[]).forEach((key) =>
-        this.#cache[key].listeners.delete(listener)
+      keys.forEach((key) =>
+        this.#cache[key.toLowerCase()].listeners.delete(listener)
       );
     };
   }

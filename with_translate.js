@@ -102,6 +102,10 @@ function translate(string, locale = 'en') {
   array.forEach((item) => {
     let value = getNestedValue(object, item);
 
+    if (value instanceof Object && !Array.isArray(value)) {
+      value = item;
+    }
+
     if (Array.isArray(value)) {
       value = value
         .map((item) => (Array.isArray(item) ? item.join(', ') : item))
