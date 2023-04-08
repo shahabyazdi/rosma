@@ -1,13 +1,16 @@
 import styled from '@emotion/styled';
 
 export const StyledMain = styled.main({
-  marginTop: 55,
-  marginLeft: 250,
+  position: 'fixed',
+  top: 60,
+  left: 250,
+  right: 0,
+  bottom: 0,
   padding: 10,
-  maxWidth: 1000,
   overflow: 'auto',
   '@media(max-width:700px)': {
-    marginLeft: 0,
+    left: 0,
+    transition: '0.4s',
   },
 });
 
@@ -26,4 +29,4 @@ export const DocsPage = styled.p({ flex: 1, textAlign: 'center' });
 
 export const DocsPageTitle = styled.span({ fontWeight: 'bold' });
 
-export const StyledDoc = styled.div({ minHeight: 300 });
+export const StyledDoc = styled.div({ minHeight: 300, maxWidth: 1000 });

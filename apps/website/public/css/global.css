@@ -22,7 +22,7 @@ pre {
 
 a {
   text-decoration: none;
-  color: inherit;
+  color: inherit !important;
 }
 
 .menu {

@@ -1,16 +1,19 @@
 //@ts-check
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const nextMdx = require('@next/mdx');
-const remarkPrism = require('remark-prism');
-const { withNx } = require('@nrwl/next/plugins/with-nx');
-const { withTranslate } = require('../../with_translate');
+import nextMdx from '@next/mdx';
+import remarkPrism from 'remark-prism';
+import { withNx } from '@nrwl/next/plugins/with-nx.js';
+import { withTranslate } from '../../with_translate.js';
+import rehypeSlug from 'rehype-slug';
+import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 
 const withMdx = nextMdx({
   extension: /\.mdx?$/,
   options: {
     providerImportSource: '@mdx-js/react',
     remarkPlugins: [remarkPrism],
+    rehypePlugins: [rehypeSlug, [rehypeAutolinkHeadings, { behavior: 'wrap' }]],
   },
 });
 
@@ -27,4 +30,4 @@ const nextConfig = {
   basePath: process.env.NODE_ENV === 'development' ? '' : '/rosma',
 };
 
-module.exports = withMdx(withTranslate(withNx(nextConfig)));
+export default withMdx(withTranslate(withNx(nextConfig)));

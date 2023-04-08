@@ -8,6 +8,7 @@ export const StyledSidebar = styled.aside<{ active: string }>(({ active }) => ({
   width: 250,
   boxShadow: '2px 5px 5px #ccc',
   backgroundColor: 'white',
+  zIndex: 1,
   '@media(max-width:700px)': {
     left: active === 'false' ? -250 : 0,
     transition: '0.4s',

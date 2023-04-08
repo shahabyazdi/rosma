@@ -12,4 +12,5 @@ export const StyledNavbar = styled.nav({
   padding: '0 15px',
   gap: 10,
   backgroundColor: 'white',
+  zIndex: 1,
 });

@@ -20,7 +20,8 @@
     "**/*.js",
     "**/*.jsx",
     "next-env.d.ts",
-    "../../with_translate.js"
+    "../../with_translate.js",
+    "next.config.mjs"
   ],
   "exclude": [
     "node_modules",
