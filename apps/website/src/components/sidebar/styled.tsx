@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 
 export const StyledSidebar = styled.aside<{ active: string }>(({ active }) => ({
-  position: 'fixed',
+  position: 'absolute',
   left: 0,
   top: 55,
   bottom: 0,
@@ -12,6 +12,7 @@ export const StyledSidebar = styled.aside<{ active: string }>(({ active }) => ({
   '@media(max-width:700px)': {
     left: active === 'false' ? -250 : 0,
     transition: '0.4s',
+    position: 'fixed',
   },
 }));
 
@@ -23,11 +24,12 @@ export const SideBarList = styled.ul({
 
 export const SideBarItem = styled.li<{ active: string }>(({ active }) => ({
   fontWeight: active === 'true' ? 'bold' : 'normal',
+  marginTop: 4,
 }));
 
 export const StyledDropdown = styled.div({
   display: 'grid',
-  position: 'fixed',
+  position: 'absolute',
   top: 55,
   backgroundColor: 'white',
   minWidth: 120,

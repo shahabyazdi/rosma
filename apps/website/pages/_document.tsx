@@ -13,14 +13,6 @@ export default function Document(props: DocumentProps) {
           href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300&family=Vazirmatn:wght@300;400&display=swap"
           rel="stylesheet"
         />
-        <link
-          href="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/themes/prism.min.css"
-          rel="stylesheet"
-        />
-        <link
-          href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.2.0/github-markdown-light.min.css"
-          rel="stylesheet"
-        />
         <meta
           name="google-site-verification"
           content="eN9hWwtvlYdXL_37ZU2ML8AUY8685Fw3O98T5vidr-4"

@@ -2,9 +2,18 @@ import Head from 'next/head';
 import Sidebar from '@/components/sidebar';
 import Navbar from '@/components/navbar';
 import Main from '@/components/main';
+import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
 import { useObserver } from 'rosma';
 import { sidebar } from '@/components/sidebar/data';
+
+const Wrapper = styled.div({
+  maxWidth: 1300,
+  margin: 'auto',
+  position: 'relative',
+  height: '100vh',
+  overflow: 'hidden',
+});
 
 const description = 'Simple and easy-to-use state management for React.';
 const keywords =
@@ -16,7 +25,7 @@ export default function MainLayout({ children, meta }) {
   const sidebarItem = sidebar.find((item) => item.path === router.pathname);
 
   return (
-    <>
+    <Wrapper>
       <Head>
         <title>
           {`${translate('Rosma')} | ${translate(sidebarItem?.name)}`}
@@ -35,6 +44,6 @@ export default function MainLayout({ children, meta }) {
       <Navbar />
       <Sidebar />
       <Main>{children}</Main>
-    </>
+    </Wrapper>
   );
 }

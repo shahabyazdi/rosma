@@ -30,6 +30,8 @@ export default function Sidebar() {
   useEffect(() => {
     window.addEventListener('resize', closeSidebar);
 
+    setIsSidebarActive(false);
+
     return () => window.removeEventListener('resize', closeSidebar);
   }, []);
 

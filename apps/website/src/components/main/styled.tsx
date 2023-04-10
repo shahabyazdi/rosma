@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 
 export const StyledMain = styled.main({
-  position: 'fixed',
+  position: 'absolute',
   top: 60,
   left: 250,
   right: 0,
@@ -29,4 +29,4 @@ export const DocsPage = styled.p({ flex: 1, textAlign: 'center' });
 
 export const DocsPageTitle = styled.span({ fontWeight: 'bold' });
 
-export const StyledDoc = styled.div({ minHeight: 300, maxWidth: 1000 });
+export const StyledDoc = styled.div({ minHeight: 300 });

@@ -2,18 +2,50 @@
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 import nextMdx from '@next/mdx';
-import remarkPrism from 'remark-prism';
+import rehypeSlug from 'rehype-slug';
+import rehypePrettyCode from 'rehype-pretty-code';
+import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import { withNx } from '@nrwl/next/plugins/with-nx.js';
 import { withTranslate } from '../../with_translate.js';
-import rehypeSlug from 'rehype-slug';
-import rehypeAutolinkHeadings from 'rehype-autolink-headings';
+import { visit } from 'unist-util-visit';
 
 const withMdx = nextMdx({
   extension: /\.mdx?$/,
   options: {
     providerImportSource: '@mdx-js/react',
-    remarkPlugins: [remarkPrism],
-    rehypePlugins: [rehypeSlug, [rehypeAutolinkHeadings, { behavior: 'wrap' }]],
+    rehypePlugins: [
+      rehypeSlug,
+      [rehypeAutolinkHeadings, { behavior: 'wrap' }],
+      () => (tree) => {
+        visit(tree, (node) => {
+          if (node?.type === 'element' && node?.tagName === 'pre') {
+            const [codeEl] = node.children;
+
+            if (codeEl.tagName !== 'code') return;
+
+            node.raw = codeEl.children?.[0].value;
+          }
+        });
+      },
+      [rehypePrettyCode, { theme: { light: 'github-light' } }],
+      () => (tree) => {
+        visit(tree, (node) => {
+          if (node?.type === 'element' && node?.tagName === 'div') {
+            if (!('data-rehype-pretty-code-fragment' in node.properties)) {
+              return;
+            }
+
+            node.properties.class = 'ltr relative';
+
+            for (const child of node.children) {
+              if (child.tagName === 'pre') {
+                child.properties['raw'] = node.raw;
+              }
+            }
+          }
+        });
+      },
+    ],
   },
 });
 

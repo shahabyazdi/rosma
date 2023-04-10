@@ -14,7 +14,7 @@ import {
 export default function Mian({ children }) {
   return (
     <StyledMain>
-      <StyledDoc className="markdown-body">{children}</StyledDoc>
+      <StyledDoc className="markdown">{children}</StyledDoc>
       <Pagination />
     </StyledMain>
   );

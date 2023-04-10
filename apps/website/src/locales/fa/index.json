@@ -10,7 +10,8 @@
     "Keywords": "کلید واژه ها",
     "Usage": "استفاده",
     "Multiple destructuring": "گرفتن همزمان چندین متغیر",
-    "Different initial values": "مقادیر اولیه متفاوت"
+    "Different initial values": "مقادیر اولیه متفاوت",
+    "Observer": "کلاس مشاهده گر"
   },
   "home": {
     "description": [
