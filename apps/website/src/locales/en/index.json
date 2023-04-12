@@ -149,7 +149,7 @@
       "In addition to updating state values, you can also observe them using Observer to be notified when they change.",
       "By default, Rosma uses a single instance of the Observer class. However, you can use multiple instances of the Observer class to better manage your project. This will be explained in the next sections.",
       "The Observer class provides several methods, which are listed below:",
-      "- observer.get \n- observer.set \n- observer.isValid \n- observer.subscribe"
+      "- [observer.get](#observerget) \n- [observer.set](#observerset) \n- [observer.state](#observerstate) \n- [observer.isValid](#observerisvalid) \n- [observer.subscribe](#observersubscribe)"
     ],
     "get": {
       "description": "The `observer.get` method is used to retrieve values from the state. You can use this method to get one or more values simultaneously.",
@@ -180,6 +180,12 @@
       "app": "The `App` component is the entry point of the application. It contains a button that triggers the opening of a modal and renders the `Modals` component that shows all open modals. The `newModal` function is imported from `actions.ts` to handle the opening of the new modal.",
       "modal": "The `Modals` component uses the `useObserver` hook to get the `modals` array from the state, which holds the data for each open modal. The `map` function is used to render a `Modal` component for each open modal. The `Modal` component is responsible for rendering the modal component with its `title`, `body`, and `close` button.",
       "actions": "The `actions` file exports two functions: `newModal` and `closeModal`. Both of these functions use the `observer` instance provided by the Rosma library to get and set the `modals` array in the global state. The `newModal` function creates a new modal object with a unique `id`, `title`, and `body` and adds it to the `modals` array. The `closeModal` function filters out the modal with the given `id` from the `modals` array."
+    },
+    "state": {
+      "description": [
+        "Returns the current value of the state.",
+        "Note that mutating the state using `observer.state` does not re-render the components or trigger listeners.  "
+      ]
     },
     "isValid": {
       "description": [
@@ -220,6 +226,36 @@
         "modals example",
         "app.tsx",
         "modals.tsx"
+      ]
+    ]
+  },
+  "multipleObservers": {
+    "description": [
+      "If you have a large-scale application, or you want to manage different the state of each part of your app separately, you can create multiple instances of the Observer class for this purpose.",
+      "If you to make instance of the `Observer` class, you must import the `Observer` from `rosma` and create an instance of it using the `new` keyword."
+    ],
+    "initialValues": "Note that you can pass the initial values of the state to the constructor of the observer class.",
+    "example": "Also, in order for the useObserver hook to use your personal observer, you can send your own observer to it.",
+    "useObserver": {
+      "description": "In order to not repeat passing the `observer` to the `useObserver` hook throughout your app, you can export your personal hook once and import it everywhere in the app, as in the example below.",
+      "explain": [
+        "This example is demonstrating how to create and export multiple instances of the `Observer` class with different initial states, using the `new` keyword. Three instances of the `observer` are created with the names `UIObserver`, `authObserver`, and `dataObserver`. Each instance has a different initial state, which is defined using objects.",
+        "In addition to creating the observers, we exports three functions, `useUIObserver()`, `useAuthObserver()`, and `useDataObserver()`, which use the `useObserver` hook to provide access to the respective observers throughout the application.",
+        "This approach can help in managing the state of different parts of an application separately. By having separate observers, you can easily modify the state of a particular part of the app without affecting the state of the other parts."
+      ]
+    },
+    "observers": {
+      "description": "To keep your code clean, it is better to keep the observers for each part of your app in a separate file. For example, the above code can be placed in three separate files as shown below:",
+      "note": "**Note:** This example is given in order to provide a **concept** of how to manage the state in an app. The parts provided above are for illustrative purposes. For instance, in the `data` section, it is advisable to use more specialized libraries for fetch and caching data, like `react-query`."
+    },
+    "keywords": [
+      [
+        "React",
+        "rosma",
+        "observer",
+        "useObserver",
+        "multiple observers",
+        "custom useObserver"
       ]
     ]
   }

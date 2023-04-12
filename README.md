@@ -1,8 +1,12 @@
 # Rosma
 
-Simple and easy-to-use state management for React.
+Simple and easy-to-use global state management for React. no need for provider, reducer or nothing else!
 
-combined javascript proxy and observer pattern to optimize your react component. no need for provider, reducer or nothing else!
+# Installation
+
+```bash
+npm i rosma
+```
 
 ## Counter app
 

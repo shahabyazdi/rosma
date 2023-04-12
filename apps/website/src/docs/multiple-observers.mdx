@@ -1,0 +1,185 @@
+import { observer, useObserver } from 'rosma';
+import { MyObserver } from '@/components/examples/myObserver';
+
+export const meta = {
+  keywords: 'multipleObservers.keywords',
+};
+
+# Multiple observers
+
+multipleObservers.description
+
+```js
+import { Observer } from 'rosma';
+
+const myObserver = new Observer();
+```
+
+multipleObservers.initialValues
+
+```js
+import { Observer } from 'rosma';
+
+const myObserver = new Observer({ foo: 'bar' });
+
+console.log(myObserver.state.foo); //"bar"
+```
+
+multipleObservers.example
+
+```jsx
+import { Observer, useObserver } from 'rosma';
+
+const myObserver = new Observer({
+  random: 'Click Generate to generate random number',
+});
+
+function App() {
+  const { random, setRandom } = useObserver(myObserver);
+
+  return (
+    <>
+      <p>{random}</p>
+      <button onClick={generate}>Generate</button>
+    </>
+  );
+
+  function generate() {
+    setRandom(Math.random() * 1000);
+  }
+}
+```
+
+<MyObserver />
+
+## Custom useObserver hook
+
+multipleObservers.useObserver.description
+
+```js
+import { Observer, useObserver } from 'rosma';
+
+const initialUIState = { mustShowSidebar: true };
+const initialAuthState = { user: undefined, token: undefined };
+const initialDataState = { posts: [], users: [] };
+
+export const UIObserver = new Observer(initialUIState);
+export const authObserver = new Observer(initialAuthState);
+export const dataObserver = new Observer(initialDataState);
+
+export function useUIObserver() {
+  return useObserver(UIObserver);
+}
+
+export function useAuthObserver() {
+  return useObserver(authObserver);
+}
+
+export function useDataObserver() {
+  return useObserver(dataObserver);
+}
+```
+
+multipleObservers.useObserver.explain
+
+## Separating observers
+
+multipleObservers.observers.description
+
+### UI part
+
+**src/observers/ui/observer.ts**
+
+```js
+import { Observer, useObserver } from 'rosma';
+
+const initialUIState = { mustShowSidebar: true };
+
+export const UIObserver = new Observer(initialUIState);
+
+export function useUIObserver() {
+  return useObserver(UIObserver);
+}
+```
+
+**src/observers/ui/actions.ts**
+
+```js
+import { UIObserver } from './observer';
+
+export function toggleSidebar() {
+  UIObserver.set({ mustShowSidebar: !UIObserver.mustShowSidebar });
+}
+```
+
+### Auth part
+
+**src/observers/auth/observer.ts**
+
+```js
+import { Observer, useObserver } from 'rosma';
+
+const initialAuthState = { user: undefined, token: undefined };
+
+export const authObserver = new Observer(initialAuthState);
+
+export function useAuthObserver() {
+  return useObserver(authObserver);
+}
+```
+
+**src/observers/auth/actions.ts**
+
+```js
+import { authObserver } from './observer';
+
+export function login({ username, password }) {
+  // logics for login
+
+  authObserver.set({ user, token });
+}
+
+export function logout() {
+  // logics for logout
+
+  authObserver.set({ user: undefined, token: undefined });
+}
+```
+
+### Data part
+
+**src/observers/data/observer.ts**
+
+```js
+import { Observer, useObserver } from 'rosma';
+
+const initialDataState = { posts: [], users: [] };
+
+export const dataObserver = new Observer(initialDataState);
+
+export function useDataObserver() {
+  return useObserver(dataObserver);
+}
+```
+
+**src/observers/data/actions.ts**
+
+```js
+import { dataObserver } from './observer';
+
+export function getPosts() {
+  // logics for getting posts
+
+  dataObserver.set({ posts });
+}
+
+export function getUsers() {
+  // logics for getting users
+
+  dataObserver.set({ users });
+}
+```
+
+multipleObservers.observers.note
+
+**Keywords**: multipleObservers.keywords

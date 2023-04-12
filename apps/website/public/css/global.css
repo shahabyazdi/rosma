@@ -40,6 +40,7 @@ pre {
   padding: 10px;
   font-size: 85%;
   line-height: 1.45;
+  overflow: auto;
 }
 
 .relative {
@@ -77,7 +78,7 @@ a {
 }
 
 .copy i {
-  background-image: url('/copy.svg');
+  background-image: url('/rosma/copy.svg');
   position: absolute;
   width: 24px;
   height: 24px;
