@@ -1,13 +1,13 @@
 {
   "name": "rosma",
-  "version": "1.2.3",
+  "version": "1.3.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/shahabyazdi/rosma.git"
   },
   "author": "Shahab Yazdi <sh.yazdi@gmail.com>",
-  "homepage": "https://github.com/shahabyazdi/rosma/",
-  "description": "combined javascript proxy and observer pattern to optimize your react component.",
+  "homepage": "https://shahabyazdi.github.io/rosma/",
+  "description": "Simple and easy-to-use global state management for React.",
   "keywords": [
     "rosma",
     "react",

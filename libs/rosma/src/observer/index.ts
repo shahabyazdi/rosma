@@ -1,10 +1,12 @@
-import { CacheData, Listener } from '../types';
+import { CacheData, Listener, StarOrKey } from '../types';
 
 class Observer<T = Record<string, any>> {
   #cache: Record<string, CacheData> = {};
   #listeners = new Map<Listener, Set<string>>();
+  #state = {};
 
   constructor(initialValues?: T) {
+    this.#createCache('*');
     this.#setValues(initialValues);
   }
 
@@ -18,7 +20,10 @@ class Observer<T = Record<string, any>> {
     }
   }
 
-  subscribe<K extends keyof T>(key: K | K[], listener: Listener) {
+  subscribe<K extends keyof T>(
+    key: StarOrKey<K> | Array<StarOrKey<K>>,
+    listener: Listener
+  ) {
     if (typeof listener !== 'function') {
       warn(['listener must be a function']);
 
@@ -64,7 +69,7 @@ class Observer<T = Record<string, any>> {
 
     keys.forEach((key) => {
       this.#createCache(key);
-      this.#cache[key].value = object[key];
+      this.#state[key.toLowerCase()] = object[key];
     });
 
     return keys;
@@ -72,14 +77,20 @@ class Observer<T = Record<string, any>> {
 
   get<K extends keyof T>(key: K | Array<K>) {
     return typeof key === 'string'
-      ? this.#cache?.[key.toLowerCase()]?.value
+      ? this.#state?.[key.toLowerCase()]
       : Array.isArray(key)
       ? Object.fromEntries(key.map((key) => [key, observer.get(key as string)]))
       : undefined;
   }
 
+  get state(): T {
+    return this.#state as T;
+  }
+
   #notify(keys: string[]) {
     const listeners = new Set<Listener>();
+
+    this.#cache['*'].listeners.forEach((listener) => listeners.add(listener));
 
     keys.forEach((key) => {
       this.#cache[key].listeners.forEach((listener) => listeners.add(listener));
@@ -89,11 +100,13 @@ class Observer<T = Record<string, any>> {
   }
 
   #getValue(listener: Listener) {
+    if (this.#cache['*'].listeners.has(listener)) return this.state;
+
     const keys = Array.from(this.#listeners.get(listener));
 
     return keys.length === 1
-      ? this.#cache[keys[0]].value
-      : Object.fromEntries(keys.map((key) => [key, this.#cache[key].value]));
+      ? this.#state[keys[0]]
+      : Object.fromEntries(keys.map((key) => [key, this.#state[key]]));
   }
 
   isValid(key: string) {

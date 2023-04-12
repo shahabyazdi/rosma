@@ -9,6 +9,8 @@ export type CacheData = {
 
 export type Setter<T> = T | ((prev: T) => T);
 
+export type StarOrKey<T> = '*' | T;
+
 export type WithSetters<T> = T extends object
   ? {
       [K in keyof T as `set${Capitalize<string & K>}`]: (
