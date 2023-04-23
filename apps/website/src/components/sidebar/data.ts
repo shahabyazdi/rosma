@@ -7,4 +7,5 @@ export const sidebar = [
   { name: 'Observer', path: '/observer' },
   { name: 'Multiple observers', path: '/multiple-observers' },
   { name: 'Subscribe for state changes', path: '/subscribe' },
+  { name: 'withState', path: '/with-state' },
 ];

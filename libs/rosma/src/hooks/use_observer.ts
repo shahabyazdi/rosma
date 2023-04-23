@@ -28,10 +28,10 @@ export function useObserver<T = Record<string, any>>(
   return new Proxy(
     {},
     {
-      get(target, prop: string) {
+      get(target, key: string) {
         const { keys } = ref.current;
 
-        prop = prop.toLowerCase();
+        const prop = key.toLowerCase();
 
         if (prop.startsWith('set')) {
           const key = prop.replace('set', '');
@@ -42,12 +42,17 @@ export function useObserver<T = Record<string, any>>(
             observer.set({ [key]: getValue(value, key) });
           };
         } else {
-          if (target[prop]) return target[prop];
+          if (target[key]) return target[key];
 
           keys.add(prop);
 
           return setValue(prop);
         }
+      },
+      defineProperty(target, prop, attributes) {
+        target[prop] = attributes.value;
+
+        return true;
       },
     }
   ) as WithSetters<T>;

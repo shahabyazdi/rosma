@@ -110,7 +110,7 @@ class Observer<T = Record<string, any>> {
   }
 
   isValid(key: string) {
-    return typeof this.#cache[key] !== 'undefined';
+    return typeof this.#cache[key.toLowerCase()] !== 'undefined';
   }
 }
 

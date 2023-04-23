@@ -310,5 +310,42 @@
         "component re-rendering"
       ]
     ]
+  },
+  "withState": {
+    "description": [
+      "You can connect your component to the global state by using the `withState` hook. The `withState` hook is used to wrap your component and provide it with access to the global state. It receives two parameters:",
+      "- The first parameter is your React component.\n- The second parameter is optional `observer` instance and is used when you want to connect your component to a custom observer.",
+      "Here's an example of how to use the `withState` hook:"
+    ],
+    "example1": [
+      "In this example, the `CountNumbers` component is wrapped with the `withState` hook. The `number` and `setNumber` props are automatically provided to the component by the hook.",
+      "If you need to pass other parameters than the state to your component, you can store the returns of `withState` in a variable and use it as a React component and pass the desired values you need as a prop to that component."
+    ],
+    "example2": "In this example, the value of `ComponentA` is taken from the returns of the `withState` hook, as you can see this component accepts the extra prop `strTime`. Also, `ComponentB` internally renders `ComponentA` by passing the `strTime` prop to it.",
+    "customObserver": {
+      "description": [
+        "You can pass your custom observer as the second parameter to `withState`.",
+        "Here's an example:"
+      ],
+      "explain": "In this example, a anonymous function as React component is connected to a custom `observer` using the `withState` hook, which is passed to the `withState` hook in the second parameter, and its output is stored and exported in a variable called `CountNumber`."
+    },
+    "keywords": [
+      [
+        "withState",
+        "global state",
+        "hook",
+        "useState",
+        "React",
+        "custom observer",
+        "component",
+        "parameters",
+        "prop",
+        "variable",
+        "time",
+        "Observer",
+        "CountNumber",
+        "setNumber"
+      ]
+    ]
   }
 }
