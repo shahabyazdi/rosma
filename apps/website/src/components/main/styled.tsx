@@ -1,9 +1,10 @@
 import styled from '@emotion/styled';
+import { SIDEBAR_WIDTH } from '../sidebar';
 
 export const StyledMain = styled.main({
   position: 'absolute',
   top: 60,
-  left: 250,
+  left: SIDEBAR_WIDTH,
   right: 0,
   bottom: 0,
   padding: 10,
@@ -29,4 +30,4 @@ export const DocsPage = styled.p({ flex: 1, textAlign: 'center' });
 
 export const DocsPageTitle = styled.span({ fontWeight: 'bold' });
 
-export const StyledDoc = styled.div({ minHeight: 300 });
+export const StyledDoc = styled.div({ minHeight: 300, padding: 10 });

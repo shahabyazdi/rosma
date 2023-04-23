@@ -1,0 +1,174 @@
+import { useObserver } from 'rosma';
+import { Component } from '@/components/examples/subscribe_outside_component';
+import { Component2 } from '@/components/examples/subscribe_inside_component';
+import { App } from '@/components/examples/subscribe_for_multiple_values';
+import { App1 } from '@/components/examples/subscribe_for_everything';
+
+export const meta = {
+  keywords: 'subscribe.keywords',
+};
+
+# Subscribe
+
+subscribe.description
+
+## Subscribing outside the React component
+
+```jsx
+import { observer, useObserver } from 'rosma';
+
+observer.subscribe('time', listener);
+
+function listener(time) {
+  alert('The time is ' + time);
+}
+
+export function Component() {
+  const { time, setTime } = useObserver();
+
+  return (
+    <div>
+      <p>{time}</p>
+      <button onClick={() => setTime(new Date().toLocaleTimeString())}>
+        Click to update
+      </button>
+    </div>
+  );
+}
+```
+
+<Component />
+
+subscribe.outside.description
+
+## Subscribing inside the React component
+
+subscribe.inside.description
+
+```jsx
+import { useEffect } from 'react';
+import { observer, useObserver } from 'rosma';
+
+export function Component2() {
+  const { time, setTime } = useObserver();
+
+  useEffect(() => {
+    const unsubscribe = observer.subscribe('time', listener);
+
+    function listener(time) {
+      alert('The time is ' + time);
+    }
+
+    return () => unsubscribe();
+  }, []);
+
+  return (
+    <div>
+      <p>{time}</p>
+      <button onClick={() => setTime(new Date().toLocaleTimeString())}>
+        Click to update
+      </button>
+    </div>
+  );
+}
+```
+
+<Component2 />
+
+## subscribing for more than one value
+
+subscribe.multiple.description
+
+```jsx
+import { observer, useObserver } from 'rosma';
+
+observer.subscribe(['random1', 'random2'], listener);
+
+function listener({ random1, random2 }) {
+  alert(`Random1: ${random1},\nRandom2: ${random2}`);
+}
+
+function Component1() {
+  const { random1, setRandom1 } = useObserver();
+
+  return (
+    <button onClick={() => setRandom1(Math.random())}>
+      {random1 || 'Random1'}
+    </button>
+  );
+}
+
+function Component2() {
+  const { random2, setRandom2 } = useObserver();
+
+  return (
+    <button onClick={() => setRandom2(Math.random())}>
+      {random2 || 'Random2'}
+    </button>
+  );
+}
+
+export function App() {
+  return (
+    <>
+      <Component1 />
+      <Component2 />
+    </>
+  );
+}
+```
+
+<App />
+
+subscribe.multiple.explain
+
+## Subscribing for every state changes
+
+subscribe.everything.description
+
+```jsx
+import { observer, useObserver } from 'rosma';
+
+observer.subscribe('*', listener);
+
+function listener({ random1, random2 }) {
+  if ((random1 || random2) === undefined) return;
+
+  alert(`Random1: ${random1},\nRandom2: ${random2}`);
+}
+
+function Component1() {
+  const { random1, setrandom1 } = useObserver();
+
+  return (
+    <button onClick={() => setrandom1(Math.random())}>
+      {random1 || 'random1'}
+    </button>
+  );
+}
+
+function Component2() {
+  const { random2, setrandom2 } = useObserver();
+
+  return (
+    <button onClick={() => setrandom2(Math.random())}>
+      {random2 || 'Random2'}
+    </button>
+  );
+}
+
+export function App() {
+  return (
+    <>
+      <Component1 />
+      <Component2 />
+    </>
+  );
+}
+```
+
+<App1 />
+
+subscribe.everything.explain
+
+**Keywords**: subscribe.keywords

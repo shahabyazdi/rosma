@@ -6,6 +6,8 @@ import { useRouter } from 'next/router';
 import { SideBarItem, SideBarList, StyledSidebar } from './styled';
 import useClickOutside from '../../hooks/use_click_outside';
 
+export const SIDEBAR_WIDTH = 270;
+
 export type SidebarItem = {
   name: string;
   path?: string;

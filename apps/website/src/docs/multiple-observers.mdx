@@ -108,7 +108,7 @@ export function useUIObserver() {
 import { UIObserver } from './observer';
 
 export function toggleSidebar() {
-  UIObserver.set({ mustShowSidebar: !UIObserver.mustShowSidebar });
+  UIObserver.set({ mustShowSidebar: !UIObserver.state.mustShowSidebar });
 }
 ```
 

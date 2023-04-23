@@ -1,16 +1,17 @@
 import styled from '@emotion/styled';
+import { SIDEBAR_WIDTH } from '.';
 
 export const StyledSidebar = styled.aside<{ active: string }>(({ active }) => ({
   position: 'absolute',
   left: 0,
   top: 55,
   bottom: 0,
-  width: 250,
+  width: SIDEBAR_WIDTH,
   boxShadow: '2px 5px 5px #ccc',
   backgroundColor: 'white',
   zIndex: 1,
   '@media(max-width:700px)': {
-    left: active === 'false' ? -250 : 0,
+    left: active === 'false' ? -SIDEBAR_WIDTH : 0,
     transition: '0.4s',
     position: 'fixed',
   },

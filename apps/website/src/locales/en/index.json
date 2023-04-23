@@ -258,5 +258,57 @@
         "custom useObserver"
       ]
     ]
+  },
+  "subscribe": {
+    "description": [
+      "We explained the subscribe method in the <u>[previous](/observer#observersubscribe)</u> sections. But we will discuss it a little more in this section.",
+      "In most cases, we need a re-render in our React component after changing the state values. But in some cases, it is necessary to monitor the state changes without making additional re-render. In this case, we can use the `subscribe` method available in the `observer`.",
+      "The subscribe method can be used in two different parts of the app.",
+      "1. Outside the React component.\n 2. Inside the useEffect hook in the React component.",
+      "**Note** that you should not use the `subscribe` method **inside** the `body` of your component. Because by doing this, you subscribe separately for the state changes by each re-render, which itself causes additional overhead."
+    ],
+    "outside": {
+      "description": [
+        "In this example, we subscribe to the `time` value using the `observer.subscribe` function, and we provide a `listener` function for observing the updates of the time value. The `listener` function simply displays an alert with the current time.",
+        "The `Component` function is a React functional component that uses the `useObserver` hook to access the current `time` value, and the `setTime` function to update it.",
+        "**Note** that the `listener` function is called before the component is re-rendered, which means that any changes made to the `time` value will be reflected in the component's UI when it next re-renders."
+      ]
+    },
+    "inside": {
+      "description": [
+        "**Note** that to subscribe inside a React component, we must put the subscribe operation inside the `useEffect` hook.",
+        "Also, another **important** point is that the subscribe method returns a function to `unsubscribe`, which must be called when our component is `unmounted`.",
+        "Here we have rewritten the same previous example for use in this section:"
+      ]
+    },
+    "multiple": {
+      "description": "You can monitor changes to multiple values by using a single listener function. To do this, instead of passing a single string as the first parameter to the `subscribe` method, you need to pass an array of strings.",
+      "explain": [
+        "In this example, we subscribe to the `random1` and `random2` values by passing an array of their names to the `observer.subscribe` function. We also provide a single `listener` function that receives an object containing the current values of both `random1` and `random2`. The `listener` function simply displays an alert with the current values of both `random1` and `random2`.",
+        "We then define two separate functional components, `Component1` and `Component2`, which use the `useObserver` hook to access the current values of `random1` and `random2` respectively. Each component also provides a button that, when clicked, updates the corresponding value using the `setRandom1` or `setRandom2` function provided by the `useObserver` hook.",
+        "Finally, we render both `Component1` and `Component2` in the `App` component, so that changes to both `random1` and `random2` can be monitored by the `listener` function. Note that any changes made to either `random1` or `random2` will be reflected in the corresponding component's UI when it next re-renders."
+      ]
+    },
+    "everything": {
+      "description": [
+        "To observe changes for all state values, you can use the `*` key in place of an array of value names when subscribing. This will allow you to listen to changes for all values in the state.",
+        "Here is an example:"
+      ],
+      "explain": "In this example, we use the `*` key as the first parameter to the `subscribe` method to listen to changes in all state values. The `listener` function receives the entire state object as an argument, and we can access the values we're interested in by destructuring the state object."
+    },
+    "keywords": [
+      [
+        "Rosma",
+        "observer",
+        "useObserver",
+        "state",
+        "state management",
+        "subscribing to state changes",
+        "subscribing to multiple state values",
+        "React",
+        "functional components",
+        "component re-rendering"
+      ]
+    ]
   }
 }
