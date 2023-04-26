@@ -53,13 +53,13 @@ const withMdx = nextMdx({
  * @type {import('@nrwl/next/plugins/with-nx').WithNxOptions}
  **/
 const nextConfig = {
+  trailingSlash: true,
   nx: {
     // Set this to true if you would like to to use SVGR
     // See: https://github.com/gregberge/svgr
     svgr: false,
   },
   pageExtensions: ['md', 'mdx', 'tsx', 'ts', 'jsx', 'js'],
-  basePath: process.env.NODE_ENV === 'development' ? '' : '/rosma',
 };
 
 export default withMdx(withTranslate(withNx(nextConfig)));

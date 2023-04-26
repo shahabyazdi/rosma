@@ -8,6 +8,10 @@ Simple and easy-to-use global state management for React. no need for provider, 
 npm i rosma
 ```
 
+# Documentation
+
+https://rosma.dev/
+
 ## Counter app
 
 ```javascript
@@ -120,11 +124,7 @@ export default function Note() {
 
   return (
     <>
-      <input
-        value={note}
-        onChange={(e) => setNote(e.target.value)}
-        placeholder="write something"
-      />
+      <input value={note} onChange={(e) => setNote(e.target.value)} placeholder="write something" />
       <button
         onClick={() => {
           setNotes(notes.concat(note));
@@ -150,13 +150,7 @@ If you want the entire main component not to be re-rendered with state changes, 
 ```javascript
 import { withState } from 'rosma';
 
-const Input = withState(({ note = '', setNote }) => (
-  <input
-    value={note}
-    onChange={(e) => setNote(e.target.value)}
-    placeholder="write something"
-  />
-));
+const Input = withState(({ note = '', setNote }) => <input value={note} onChange={(e) => setNote(e.target.value)} placeholder="write something" />);
 
 const Button = withState(({ note, setNotes, setNote }) => (
   <button
@@ -195,13 +189,7 @@ To avoid extra rendering, you can read the values directly from the observer. In
 ```javascript
 import { observer, withState } from 'rosma';
 
-const Input = withState(({ note = '', setNote }) => (
-  <input
-    value={note}
-    onChange={(e) => setNote(e.target.value)}
-    placeholder="write something"
-  />
-));
+const Input = withState(({ note = '', setNote }) => <input value={note} onChange={(e) => setNote(e.target.value)} placeholder="write something" />);
 
 const Button = withState(({ setNotes, setNote }) => (
   <button
