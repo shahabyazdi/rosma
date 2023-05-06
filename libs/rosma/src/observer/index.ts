@@ -1,4 +1,10 @@
-import { CacheData, Listener, StarOrKey } from '../types';
+import {
+  CacheData,
+  Listener,
+  ObserverValues,
+  SetOptions,
+  StarOrKey,
+} from '../types';
 
 class Observer<T = Record<string, any>> {
   #cache: Record<string, CacheData> = {};
@@ -52,12 +58,16 @@ class Observer<T = Record<string, any>> {
   }
 
   set<StateType>(
-    object: Partial<StateType | T>,
-    { silent }: { silent?: boolean } = { silent: false }
+    values: ObserverValues<StateType, T>,
+    { silent }: SetOptions = { silent: false }
   ) {
-    if (typeof object !== 'object') return;
+    if (typeof values === 'function') {
+      values = values(this.state as StateType extends object ? StateType : T);
+    }
 
-    const keys = this.#setValues(object);
+    if (typeof values !== 'object') return;
+
+    const keys = this.#setValues(values);
 
     if (!silent && keys) this.#notify(keys);
   }

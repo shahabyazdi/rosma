@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Observer, observer as globalObserver } from '../observer';
-import { WithSetters } from '../types';
+import { ObserverValues, SetOptions, WithSetters } from '../types';
 
 export function useObserver<T = Record<string, any>>(
   input = undefined
@@ -33,7 +33,13 @@ export function useObserver<T = Record<string, any>>(
 
         const prop = key.toLowerCase();
 
-        if (prop.startsWith('set')) {
+        if (prop === 'set') {
+          return (...args) => {
+            observer.set(
+              ...(args as [ObserverValues<T, Record<string, any>>, SetOptions])
+            );
+          };
+        } else if (prop.startsWith('set')) {
           const key = prop.replace('set', '');
 
           if (typeof initialValue !== 'undefined') setValue(key);
