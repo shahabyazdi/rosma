@@ -89,7 +89,7 @@ function translate(string, locale = 'en') {
     )
   );
 
-  let array = string.match(/(\w+\s)+\w+/gm) || [];
+  let array = string.match(/([\w`]+\s)+\w+/gm) || [];
 
   array.forEach((item) => {
     if (typeof item !== 'string') return;

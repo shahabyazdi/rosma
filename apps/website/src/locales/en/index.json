@@ -347,5 +347,64 @@
         "setNumber"
       ]
     ]
+  },
+  "useObserver": {
+    "description": [
+      "`useObserver` is a React hook that allows you to observe changes to state variables and trigger a re-render of your component when those variables change.",
+      "When you use useObserver, you can provide an initial value for a variable, and that variable will be added to the global state. If the variable already exists in the state, useObserver will return the existing value.",
+      "In addition to the value of the variable, useObserver also provides a setter function that you can use to update the value of the variable. When you call the setter function, useObserver will update the state with the new value and trigger a re-render of your component.",
+      "Here's an example of how to use useObserver:"
+    ],
+    "explain": [
+      "In this example, useObserver is used to create a variable named `foo` with an initial value of `bar`. The `setFoo` function is used to update the value of foo whenever the `Toggle Foo` button is clicked.",
+      "By using `useObserver`, the component will automatically re-render whenever the value of foo changes, ensuring that the UI stays in sync with the state."
+    ],
+    "previousValue": {
+      "description": [
+        "In some cases, we may need to reference the previous value of a state variable when setting a new value. To achieve this, we can pass a function to the setter function returned by `useObserver`, which will receive the previous value as an argument.",
+        "Here's an example of how to use a function to set a new value based on the previous value:"
+      ],
+      "explain": [
+        "In this example, we use the `setFoo` function to set the value of `foo` based on its previous value. The function passed to setFoo receives the previous value of `foo` as an argument, which we can reference as `prevFoo`. We then use a ternary operator to toggle the value of foo between `'bar'` and `'baz'`.",
+        "By using a function to set the value of `foo`, we can ensure that the new value is based on the previous value, prevents unnecessary re-renders of the component and enhances the readability of the code."
+      ]
+    },
+    "multipleValues": {
+      "description": [
+        "In some cases, you may need to set multiple state values at once. Instead of calling each setter function individually, you can use the `set` function returned by `useObserver` to set multiple state values at the same time.",
+        "Here's an example of how to set multiple state values using the `set` function:"
+      ],
+      "explain": [
+        "In this example, we use the `set` function to set the `firstName` and `lastName` state values at the same time. We pass an object with the new values for both state values to the set function.",
+        "By setting multiple state values at the same time using the `set` function, we can avoid issues with stale state values that may arise from setting each state value individually."
+      ]
+    },
+    "setFunction": {
+      "description": [
+        "Just like you can pass a function to a setter to update the state based on the previous state value, you can also pass a function to the `set` function to update multiple state values based on the current state.",
+        "When using a function with `set`, you'll get the entire current state object as the argument. This can be useful if you want to update multiple state values based on the current state.",
+        "Here's an example of using a function with `set` to increment two state values at once:"
+      ],
+      "explain": [
+        "In this example, we use the `set` function to update both `num1` and `num2` state values based on their current values. We pass a function that receives the current state object as its argument and returns a new object with updated values for num1 and num2.",
+        "Using a function with `set` can be useful when you need to update multiple state values at once, based on their current values."
+      ]
+    },
+    "keywords": [
+      [
+        "useObserver",
+        "React hook",
+        "state variables",
+        "re-render",
+        "setter",
+        "previous value",
+        "set function",
+        "multiple values",
+        "set state with function",
+        "update state",
+        "useState",
+        "UI synchronization"
+      ]
+    ]
   }
 }

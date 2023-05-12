@@ -40,7 +40,7 @@ class Observer<T = Record<string, any>> {
 
     this.#addListener(listener);
 
-    const keys = key.map((key) => key.toString().toLowerCase());
+    const keys = key.map(toLowerCase);
 
     keys.forEach((key) => {
       this.#createCache(key);
@@ -51,9 +51,7 @@ class Observer<T = Record<string, any>> {
     return () => {
       this.#listeners.delete(listener);
 
-      keys.forEach((key) =>
-        this.#cache[key.toLowerCase()].listeners.delete(listener)
-      );
+      keys.forEach((key) => this.#cache[key].listeners.delete(listener));
     };
   }
 
@@ -61,10 +59,7 @@ class Observer<T = Record<string, any>> {
     values: ObserverValues<StateType, T>,
     { silent }: SetOptions = { silent: false }
   ) {
-    if (typeof values === 'function') {
-      values = values(this.state as StateType extends object ? StateType : T);
-    }
-
+    if (typeof values === 'function') values = values(proxy(this.#state));
     if (typeof values !== 'object') return;
 
     const keys = this.#setValues(values);
@@ -75,11 +70,12 @@ class Observer<T = Record<string, any>> {
   #setValues(object) {
     if (typeof object !== 'object') return;
 
-    const keys = Object.keys(object);
+    const originalKeys = Object.keys(object);
+    const keys = originalKeys.map(toLowerCase);
 
-    keys.forEach((key) => {
+    keys.forEach((key, index) => {
       this.#createCache(key);
-      this.#state[key.toLowerCase()] = object[key];
+      this.#state[key] = object[originalKeys[index]];
     });
 
     return keys;
@@ -87,14 +83,16 @@ class Observer<T = Record<string, any>> {
 
   get<K extends keyof T>(key: K | Array<K>) {
     return typeof key === 'string'
-      ? this.#state?.[key.toLowerCase()]
+      ? this.#state[key.toLowerCase()]
       : Array.isArray(key)
-      ? Object.fromEntries(key.map((key) => [key, observer.get(key as string)]))
+      ? Object.fromEntries(
+          key.map((key) => [key, this.#state[toLowerCase(key)]])
+        )
       : undefined;
   }
 
   get state(): T {
-    return this.#state as T;
+    return proxy(this.#state);
   }
 
   #notify(keys: string[]) {
@@ -103,7 +101,9 @@ class Observer<T = Record<string, any>> {
     this.#cache['*'].listeners.forEach((listener) => listeners.add(listener));
 
     keys.forEach((key) => {
-      this.#cache[key].listeners.forEach((listener) => listeners.add(listener));
+      this.#cache[key.toLowerCase()].listeners.forEach((listener) =>
+        listeners.add(listener)
+      );
     });
 
     listeners.forEach((listener) => listener(this.#getValue(listener)));
@@ -130,4 +130,21 @@ export { Observer, observer };
 
 function warn(message: string[]) {
   console.warn(message.join('\n'));
+}
+
+function proxy(object) {
+  return new Proxy(object, {
+    get(target, prop) {
+      return target[toLowerCase(prop)];
+    },
+    set(target, prop, value) {
+      target[toLowerCase(prop)] = value;
+
+      return true;
+    },
+  });
+}
+
+function toLowerCase(string) {
+  return string.toString().toLowerCase();
 }

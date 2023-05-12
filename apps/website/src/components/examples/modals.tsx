@@ -31,6 +31,7 @@ function Modal({ title, body, id }) {
         top: '50%',
         transform: 'translate(-50%, -50%)',
         borderRadius: '7px',
+        zIndex: 1,
       }}
     >
       <div

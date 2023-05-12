@@ -1,0 +1,117 @@
+import {
+  Example1,
+  Example2,
+  Example3,
+  Example4,
+} from '@/components/examples/use_observer';
+
+export const meta = {
+  keywords: 'useObserver.keywords',
+};
+
+# useObserver
+
+useObserver.description
+
+```js
+import { useObserver } from 'rosma';
+
+export default function Example() {
+  const { foo, setFoo } = useObserver('bar');
+
+  return (
+    <div>
+      <p>Foo: {foo}</p>
+      <button onClick={() => setFoo(foo === 'bar' ? 'baz' : 'bar')}>
+        Toggle Foo
+      </button>
+    </div>
+  );
+}
+```
+
+<Example1 />
+
+useObserver.explain
+
+## Get the previous value from the setter
+
+useObserver.previousValue.description
+
+```js
+import { useObserver } from 'rosma';
+
+export default function Example() {
+  const { foo, setFoo } = useObserver('bar');
+
+  return (
+    <div>
+      <p>Foo: {foo}</p>
+      <button
+        onClick={() => setFoo((prevFoo) => (prevFoo === 'bar' ? 'baz' : 'bar'))}
+      >
+        Toggle Foo
+      </button>
+    </div>
+  );
+}
+```
+
+<Example2 />
+
+useObserver.previousValue.explain
+
+## Set multiple values at same time
+
+useObserver.multipleValues.description
+
+```js
+export function Example() {
+  const { firstName, lastName, set } = useObserver('');
+
+  return (
+    <div>
+      <p>
+        Full Name: {firstName} {lastName}
+      </p>
+      <button onClick={() => set({ firstName: 'John', lastName: 'Doe' })}>
+        Set full name
+      </button>
+    </div>
+  );
+}
+```
+
+<Example3 />
+
+useObserver.multipleValues.explain
+
+## Passing function to `set` as parameter
+
+useObserver.setFunction.description
+
+```js
+export function Example4() {
+  const { num1, num2, set } = useObserver(0);
+
+  return (
+    <div>
+      <p>num1: {num1}</p>
+      <p>num2: {num2}</p>
+      <button
+        onClick={() =>
+          set(({ num1, num2 }) => ({ num1: num1 + 1, num2: num2 + 1 }))
+        }
+      >
+        increment
+      </button>
+    </div>
+  );
+}
+```
+
+useObserver.setFunction.explain
+
+<Example4 />
+
+**Keywords**: useObserver.keywords
