@@ -7,8 +7,8 @@
     "description": [
       "Rosma is a lightweight and easy-to-use global state management library designed for React applications. It offers three essential APIs for managing your app's state: `observer`, `useObserver`, and `withState`.",
       "Unlike other state management libraries, Rosma is incredibly easy to set up and use. it is written in such a way that it does not require an initial and sometimes complicated setup. Simply install it via npm (`npm i rosma`), and you're good to go.",
-      "One of the key advantages of Rosma is its simple naming convention for variables and setter methods. To set a setter method for a variable, all you need to do is prepend the variable name with the `set` and destructure it from the state management. For instance, to set a value for the `count` variable, you would name the corresponding setter method `setCount`.",
-      "Rosma's `observer` API allows you to declare global state variables and update them from anywhere in your application. `useObserver` provides a simple way to consume these global state variables in your functional components, while `withState` is a higher-order component that enables based components to access the global state.",
+      "One of the key advantages of Rosma is its simple naming convention for variables and setter methods. To set a setter method for a variable, all you need to do is prepend the variable name with the `set`. For instance, after setting a value for the `count` variable, you would name the corresponding setter method `setCount`.",
+      "Rosma's `observer` class allows you to declare global state variables and update them from anywhere in your application. `useObserver` provides a simple way to consume these global state variables in your functional components, while `withState` is a higher-order component that enables based components to access the global state.",
       "Overall, Rosma is a powerful yet straightforward state management library that simplifies the process of managing your app's state. Try it out today and see how it can improve your development workflow."
     ],
     "keywords": [
@@ -72,7 +72,7 @@
       "explain": "In the example above, we've destructured the `setCount` and `count` variables in the opposite order from the previous example, and Rosma is still able to assign the correct values to each variable."
     },
     "caseinsensitive": {
-      "description": "It's also important to note that all variables names in the state are case-insensitive. This means that you can use any combination of uppercase and lowercase letters when destructuring your variables.",
+      "description": "Additionally, please note that **all variables in the state are stored in lowercase**, but the names retrieved from the state values are not case-sensitive. This means you can use any combination of uppercase and lowercase letters when retrieving your variables using `useObserver`.",
       "explain": [
         "In the example above, we've taken the `count` variable as `CouNt` and its corresponding setter method as `setcOunT`, both with mixed case letters. Rosma is still able to assign the correct values to each variable based on their names.",
         "By using the `useObserver` hook along with its corresponding setter method naming convention, Rosma makes it easy to manage global state variables in your React application. Give it a try and see how it can simplify your state management process."
@@ -96,7 +96,7 @@
   },
   "multipleDestructuring": {
     "description": [
-      "In Rosma, you can easily destructure multiple variables at once from the observer object returned by the `useObserver` hook. This can make your code more concise and easier to read.",
+      "In Rosma, you can easily destructure multiple variables at once from the object returned by the `useObserver` hook. This can make your code more concise and easier to read.",
       "Here's an example:"
     ],
     "explain": "In the above code, we are destructuring `count`, `setCount`, `count1`, and `setCount1` variables from the `useObserver` hook. This allows us to directly use these variables in our component without needing to access them through the observer object.",
@@ -119,13 +119,15 @@
   "initialValues": {
     "description": "By default, all the destructured variables from `useObserver` have the same initial value. To set different initial values for each variable, you have a couple of options:",
     "separate": {
-      "explain": "In the above code, we have created two separate useObserver hooks to define different initial values for count and count1."
+      "explain": [
+        "In the above code, we have created two separate useObserver hooks to define different initial values for count and count1.",
+        "Overall, destructuring multiple variables from `useObserver` can help make your code more concise and readable, and setting different initial values for each variable is easy using the methods described above."
+      ]
     },
     "once": {
       "description": "If you want to set initial values for all the destructured variables at once, you can use the `observer.set` method before calling the `useObserver` hook:",
       "explain": [
-        "In the above code, we are setting the initial values for `count` and `count1` using the `observer.set` before calling the `useObserver` hook. This allows us to destructure the variables without passing any arguments to the `useObserver` hook, and the variables will have the initial values we specified using the `observer.set`.",
-        "Overall, destructuring multiple variables from `useObserver` can help make your code more concise and readable, and setting different initial values for each variable is easy using the methods described above."
+        "In the above code, we are setting the initial values for `count` and `count1` using the `observer.set` before calling the `useObserver` hook. This allows us to destructure the variables without passing any arguments to the `useObserver` hook, and the variables will have the initial values we specified using the `observer.set`."
       ]
     },
     "keywords": [
@@ -145,7 +147,7 @@
   },
   "observer": {
     "description": [
-      "Observer is a tool that allows you to declare global state variables and update them from anywhere in your application.",
+      "Observer class is a tool that allows you to declare global state variables and update them from anywhere in your application.",
       "In addition to updating state values, you can also observe them using Observer to be notified when they change.",
       "By default, Rosma uses a single instance of the Observer class. However, you can use multiple instances of the Observer class to better manage your project. This will be explained in the next sections.",
       "The Observer class provides several methods, which are listed below:",
@@ -184,6 +186,7 @@
     "state": {
       "description": [
         "Returns the current value of the state.",
+        "As mentioned <u>[previously](/usage/#case-insensitive-variables)</u>, **all variables in the state are stored in lowercase**, while the names retrieved from the state values are **not** case-sensitive.",
         "Note that mutating the state using `observer.state` does not re-render the components or trigger listeners.  "
       ]
     },

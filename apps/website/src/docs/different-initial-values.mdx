@@ -8,7 +8,47 @@ export const meta = {
 
 initialValues.description
 
-**1. Define initial values separately:**
+**1. Define initial values at once:**
+
+initialValues.once.description
+
+```javascript
+import { observer, useObserver } from 'rosma';
+
+observer.set({ count: 10, count1: 20 });
+
+export default function Counts() {
+  const { count, setCount, count1, setCount1 } = useObserver();
+
+  return (
+    <>
+      <button onClick={() => setCount(count + 1)}>{count}</button>
+      <button onClick={() => setCount1(count1 + 1)}>{count1}</button>
+    </>
+  );
+}
+```
+
+initialValues.once.explain
+
+**2. Assign initial values to the variable itself:**
+
+```javascript
+import { observer, useObserver } from 'rosma';
+
+export default function Counts() {
+  const { count = 10, setCount, count1 = 20, setCount1 } = useObserver();
+
+  return (
+    <>
+      <button onClick={() => setCount(count + 1)}>{count}</button>
+      <button onClick={() => setCount1(count1 + 1)}>{count1}</button>
+    </>
+  );
+}
+```
+
+**3. Define initial values separately:**
 
 ```javascript
 import { useObserver } from 'rosma';
@@ -33,29 +73,6 @@ export default function Counts() {
 ---
 
 initialValues.separate.explain
-
-**2. Define initial values at once:**
-
-initialValues.once.description
-
-```javascript
-import { observer, useObserver } from 'rosma';
-
-observer.set({ count: 10, count1: 20 });
-
-export default function Counts() {
-  const { count, setCount, count1, setCount1 } = useObserver();
-
-  return (
-    <>
-      <button onClick={() => setCount(count + 1)}>{count}</button>
-      <button onClick={() => setCount1(count1 + 1)}>{count1}</button>
-    </>
-  );
-}
-```
-
-initialValues.once.explain
 
 **Keywords**: initialValues.keywords
 

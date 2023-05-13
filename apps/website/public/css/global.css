@@ -38,9 +38,14 @@ pre {
   box-shadow: inset 0 0 5px #ccc;
   background-color: rgba(175, 184, 193, 0.2) !important;
   padding: 10px;
-  font-size: 85%;
   line-height: 1.45;
   overflow: auto;
+}
+
+pre code * {
+  font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas,
+    Liberation Mono, monospace;
+  font-size: 95%;
 }
 
 .relative {
