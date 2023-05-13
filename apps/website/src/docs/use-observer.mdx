@@ -13,11 +13,32 @@ export const meta = {
 
 useObserver.description
 
-```js
+```jsx
 import { useObserver } from 'rosma';
 
 export default function Example() {
   const { foo, setFoo } = useObserver('bar');
+
+  return (
+    <div>
+      <p>Foo: {foo}</p>
+      <button onClick={() => setFoo(foo === 'bar' ? 'baz' : 'bar')}>
+        Toggle Foo
+      </button>
+    </div>
+  );
+}
+```
+
+```tsx
+import { useObserver } from 'rosma';
+
+type State = {
+  foo: 'bar' | 'baz';
+};
+
+export default function Example() {
+  const { foo, setFoo } = useObserver<State>('bar');
 
   return (
     <div>
@@ -38,11 +59,34 @@ useObserver.explain
 
 useObserver.previousValue.description
 
-```js
+```jsx
 import { useObserver } from 'rosma';
 
 export default function Example() {
   const { foo, setFoo } = useObserver('bar');
+
+  return (
+    <div>
+      <p>Foo: {foo}</p>
+      <button
+        onClick={() => setFoo((prevFoo) => (prevFoo === 'bar' ? 'baz' : 'bar'))}
+      >
+        Toggle Foo
+      </button>
+    </div>
+  );
+}
+```
+
+```tsx
+import { useObserver } from 'rosma';
+
+type State = {
+  foo: 'bar' | 'baz';
+};
+
+export default function Example() {
+  const { foo, setFoo } = useObserver<State>('bar');
 
   return (
     <div>
@@ -65,9 +109,35 @@ useObserver.previousValue.explain
 
 useObserver.multipleValues.description
 
-```js
+```jsx
+import { useObserver } from 'rosma';
+
 export function Example() {
   const { firstName, lastName, set } = useObserver('');
+
+  return (
+    <div>
+      <p>
+        Full Name: {firstName} {lastName}
+      </p>
+      <button onClick={() => set({ firstName: 'John', lastName: 'Doe' })}>
+        Set full name
+      </button>
+    </div>
+  );
+}
+```
+
+```tsx
+import { useObserver } from 'rosma';
+
+type State = {
+  firstName: string;
+  lastName: string;
+};
+
+export function Example() {
+  const { firstName, lastName, set } = useObserver<State>('');
 
   return (
     <div>
@@ -90,9 +160,38 @@ useObserver.multipleValues.explain
 
 useObserver.setFunction.description
 
-```js
+```jsx
+import { useObserver } from 'rosma';
+
 export function Example4() {
   const { num1, num2, set } = useObserver(0);
+
+  return (
+    <div>
+      <p>num1: {num1}</p>
+      <p>num2: {num2}</p>
+      <button
+        onClick={() =>
+          set(({ num1, num2 }) => ({ num1: num1 + 1, num2: num2 + 1 }))
+        }
+      >
+        increment
+      </button>
+    </div>
+  );
+}
+```
+
+```tsx
+import { useObserver } from 'rosma';
+
+type State = {
+  num1: number;
+  num2: number;
+};
+
+export function Example4() {
+  const { num1, num2, set } = useObserver<State>(0);
 
   return (
     <div>

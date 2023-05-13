@@ -8,11 +8,31 @@ export const meta = {
 
 multipleDestructuring.description
 
-```javascript
+```jsx
 import { useObserver } from 'rosma';
 
 export default function Counts() {
   const { count, setCount, count1, setCount1 } = useObserver(0);
+
+  return (
+    <>
+      <button onClick={() => setCount(count + 1)}>{count}</button>
+      <button onClick={() => setCount1(count1 + 1)}>{count1}</button>
+    </>
+  );
+}
+```
+
+```tsx
+import { useObserver } from 'rosma';
+
+type State = {
+  count: number;
+  count1: number;
+};
+
+export default function Counts() {
+  const { count, setCount, count1, setCount1 } = useObserver<State>(0);
 
   return (
     <>

@@ -74,29 +74,38 @@ a {
   display: none;
 }
 
-.copy {
+.code-toolbar {
+  display: flex;
+  justify-content: flex-end;
   position: absolute;
-  right: 8px;
-  top: 10px;
+  right: 10px;
+}
+
+.code-toolbar i {
+  display: block;
+  cursor: pointer;
   width: 24px;
   height: 24px;
 }
 
 .copy i {
   background-image: url('/copy.svg');
-  position: absolute;
-  width: 24px;
-  height: 24px;
-  cursor: pointer;
 }
 
 .copy span {
   position: absolute;
-  top: 1px;
-  right: 30px;
+  top: 0px;
   padding: 2px 5px;
   border-radius: 5px;
   background-color: rgba(205, 212, 219, 0.5);
+}
+
+i.js {
+  background-image: url('/javascript.svg');
+}
+
+i.ts {
+  background-image: url('/typescript.svg');
 }
 
 @media (max-width: 700px) {

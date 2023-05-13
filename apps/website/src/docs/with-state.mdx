@@ -21,6 +21,20 @@ function CountNumbers({ number = 0, setNumber }) {
 export default withState(CountNumbers);
 ```
 
+```tsx
+import { withState, WithSetters } from 'rosma';
+
+type State = {
+  number: number;
+};
+
+function CountNumbers({ number = 0, setNumber }: WithSetters<State>) {
+  return <button onClick={() => setNumber(number + 1)}>{number}</button>;
+}
+
+export default withState(CountNumbers);
+```
+
 <Counter />
 
 withState.example1
@@ -54,6 +68,41 @@ export function ComponentB() {
 }
 ```
 
+```tsx
+import { useState } from 'react';
+import { withState } from 'rosma';
+
+type State = {
+  number: number;
+};
+
+const ComponentA = withState<State, { strTime: string }>(
+  ({ number = 0, setNumber, strTime }) => (
+    <div style={{ backgroundColor: '#efefef', padding: '5px' }}>
+      <p style={{ fontWeight: 'bold' }}>Component A</p>
+      <button onClick={() => setNumber(number + 1)}>Count is: {number}</button>
+      <p>Time is: {strTime}</p>
+    </div>
+  )
+);
+
+export function ComponentB() {
+  const [strTime, setStrTime] = useState<string>('');
+
+  return (
+    <>
+      <ComponentA strTime={strTime} />
+      <div style={{ backgroundColor: '#e2e2e2', padding: '5px' }}>
+        <p style={{ fontWeight: 'bold' }}>Component B</p>
+        <button onClick={() => setStrTime(new Date().toLocaleTimeString())}>
+          click to update time
+        </button>
+      </div>
+    </>
+  );
+}
+```
+
 <ComponentB />
 
 withState.example2
@@ -68,6 +117,23 @@ import { withState, Observer } from 'rosma';
 const observer = new Observer({ number: 10 });
 
 export const CountNumber = withState(
+  ({ number, setNumber }) => (
+    <button onClick={() => setNumber(number + 1)}>Number is :{number}</button>
+  ),
+  observer
+);
+```
+
+```tsx
+import { withState, Observer } from 'rosma';
+
+type State = {
+  number: number;
+};
+
+const observer = new Observer<State>({ number: 10 });
+
+export const CountNumber = withState<State>(
   ({ number, setNumber }) => (
     <button onClick={() => setNumber(number + 1)}>Number is :{number}</button>
   ),

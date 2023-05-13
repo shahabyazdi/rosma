@@ -19,10 +19,18 @@ observer.get.description
 
 observer.get.singleValue
 
-```javascript
+```js
 import { observer } from 'rosma';
 
 const foo = observer.get('foo');
+
+console.log(foo); // bar
+```
+
+```ts
+import { observer } from 'rosma';
+
+const foo: string = observer.get('foo');
 
 console.log(foo); // bar
 ```
@@ -31,7 +39,7 @@ console.log(foo); // bar
 
 observer.get.multipleValues
 
-```javascript
+```js
 import { observer } from 'rosma';
 
 const values = observer.get(['foo', 'baz']);
@@ -39,12 +47,38 @@ const values = observer.get(['foo', 'baz']);
 console.log(values); // { foo: 'bar', baz: 'qux' }
 ```
 
+```ts
+import { observer } from 'rosma';
+
+type State = {
+  foo: string;
+  baz: string;
+};
+
+const values = observer.get<State>(['foo', 'baz']);
+
+console.log(values); // { foo: 'bar', baz: 'qux' }
+```
+
 observer.get.explain
 
-```javascript
+```js
 import { observer } from 'rosma';
 
 const { foo, baz } = observer.get(['foo', 'baz']);
+
+console.log(foo, baz); // 'bar', 'qux'
+```
+
+```ts
+import { observer } from 'rosma';
+
+type State = {
+  foo: string;
+  baz: string;
+};
+
+const { foo, baz } = observer.get<State>(['foo', 'baz']);
 
 console.log(foo, baz); // 'bar', 'qux'
 ```
@@ -55,7 +89,7 @@ observer.set.description
 
 ### Demo
 
-```javascript
+```jsx
 import { observer, useObserver } from 'rosma';
 
 export function DisplayTime() {
@@ -88,6 +122,45 @@ function Button(props) {
 }
 ```
 
+```tsx
+import { observer, useObserver } from 'rosma';
+
+type State = {
+  time: string;
+};
+
+export function DisplayTime() {
+  const { time, setTime } = useObserver<State>('');
+
+  return (
+    <div>
+      <p>Time is: {time}</p>
+      <Button onClick={() => setTime(getTime())}>
+        Update time with setter method
+      </Button>
+      <Button onClick={() => observer.set<State>({ time: getTime() })}>
+        Update time with observer.set
+      </Button>
+      <Button
+        onClick={() =>
+          observer.set<State>({ time: getTime() }, { silent: true })
+        }
+      >
+        Update time silently
+      </Button>
+    </div>
+  );
+}
+
+function getTime() {
+  return new Date().toLocaleTimeString();
+}
+
+function Button(props) {
+  return <button {...props} style={{ display: 'block' }} />;
+}
+```
+
 <DisplayTime />
 <br />
 
@@ -97,11 +170,43 @@ observer.set.demo
 
 observer.example.description
 
+<Types />
+
+```ts
+export type Modal = {
+  title: string;
+  body: string;
+  id?: number;
+};
+
+export type State = {
+  modals: Modal[];
+};
+```
+
 **app.tsx**
 
 observer.example.app
 
-```javascript
+```jsx
+import Modals from './modals';
+import { newModal } from './actions';
+
+export function App() {
+  return (
+    <>
+      <button
+        onClick={() => newModal({ title: 'Modal title', body: 'Modal body' })}
+      >
+        Open Modal
+      </button>
+      <Modals />
+    </>
+  );
+}
+```
+
+```tsx
 import Modals from './modals';
 import { newModal } from './actions';
 
@@ -123,7 +228,7 @@ export function App() {
 
 observer.example.modal
 
-```javascript
+```jsx
 import { useObserver } from 'rosma';
 import { closeModal } from './actions';
 
@@ -166,11 +271,61 @@ function Modal({ title, body, id }) {
 }
 ```
 
+```tsx
+import { useObserver } from 'rosma';
+import { closeModal } from './actions';
+import { Modal, State } from './types';
+
+export default function Modals() {
+  const { modals } = useObserver<State>([]);
+
+  return (
+    <>
+      {modals.map((modal, index) => (
+        <Modal key={index} {...modal} />
+      ))}
+    </>
+  );
+}
+
+function Modal({ title, body, id }: Modal) {
+  return (
+    <div
+      style={{
+        backgroundColor: 'white',
+        boxShadow: '0 0 5px #ccc',
+        minWidth: '300px',
+        position: 'fixed',
+        left: '50%',
+        top: '50%',
+        transform: 'translate(-50%, -50%)',
+        borderRadius: '7px',
+      }}
+    >
+      <div
+        style={{
+          display: 'flex',
+          padding: '10px',
+          borderBottom: '1px solid #ccc',
+          gap: '5px',
+        }}
+      >
+        <span>{title}</span>
+        <span>#{id}</span>
+        <div style={{ flex: 1 }} />
+        <button onClick={() => closeModal(id)}>x</button>
+      </div>
+      <div style={{ padding: '10px' }}>{body}</div>
+    </div>
+  );
+}
+```
+
 **actions.ts**
 
 observer.example.actions
 
-```javascript
+```js
 import { observer } from 'rosma';
 
 export function newModal({ title, body }) {
@@ -194,6 +349,31 @@ export function closeModal(id) {
 }
 ```
 
+```ts
+import { observer } from 'rosma';
+import { Modal, State } from './types';
+
+export function newModal({ title, body }: Modal) {
+  const modals: Modal[] = observer.get('modals') || [];
+
+  const modal: Modal = {
+    id: modals.length + 1,
+    title,
+    body,
+  };
+
+  modals.push(modal);
+
+  observer.set<State>({ modals });
+}
+
+export function closeModal(id: number) {
+  const modals: Modal[] = observer.get('modals') || [];
+
+  observer.set<State>({ modals: modals.filter((modal) => modal.id !== id) });
+}
+```
+
 ### Demo
 
 <App />
@@ -203,7 +383,15 @@ export function closeModal(id) {
 observer.state.description
 
 ```js
-import { observer } from 'observer';
+import { observer } from 'rosma';
+
+observer.set({ foo: 'bar' });
+
+console.log(observer.state.foo); // "bar"
+```
+
+```ts
+import { observer } from 'rosma';
 
 observer.set({ foo: 'bar' });
 
@@ -214,7 +402,17 @@ console.log(observer.state.foo); // "bar"
 
 observer.isValid.description
 
-```javascript
+```js
+import { observe } from 'rosma';
+
+observer.isValid('myVariable'); // false
+
+observer.set({ myVariable: 'something' });
+
+observer.isValid('myVariable'); // true
+```
+
+```ts
 import { observe } from 'rosma';
 
 observer.isValid('myVariable'); // false
@@ -235,7 +433,7 @@ observer.subscribe.description
 <br />
 <br />
 
-```javascript
+```jsx
 import { observer, useObserver } from 'rosma';
 
 const unsubscribe = observer.subscribe('myVar', listener);
@@ -256,6 +454,36 @@ export function ObserverTest() {
 }
 ```
 
+```tsx
+import { observer, useObserver } from 'rosma';
+
+type State = {
+  myVar: Date;
+};
+
+const unsubscribe = observer.subscribe<State>('myVar', listener);
+
+function listener(myVar: State['myVar']) {
+  alert('myVar changed! ' + myVar);
+}
+
+export function ObserverTest() {
+  const { setMyVar } = useObserver<State>();
+
+  return (
+    <>
+      <button onClick={() => setMyVar(new Date())}>Click me</button>
+      <button onClick={unsubscribe}>Unsubscribe</button>
+    </>
+  );
+}
+```
+
 observer.subscribe.demo
 
 **Keywords**: observer.keywords
+
+export function Types() {
+  const { lang } = useObserver();
+  return lang === 'js' ? '' : <strong>types.tsx</strong>;
+}

@@ -15,12 +15,30 @@ import { Observer } from 'rosma';
 const myObserver = new Observer();
 ```
 
+```ts
+import { Observer } from 'rosma';
+
+const myObserver = new Observer();
+```
+
 multipleObservers.initialValues
 
 ```js
 import { Observer } from 'rosma';
 
 const myObserver = new Observer({ foo: 'bar' });
+
+console.log(myObserver.state.foo); //"bar"
+```
+
+```ts
+import { Observer } from 'rosma';
+
+type State = {
+  foo: string;
+};
+
+const myObserver = new Observer<State>({ foo: 'bar' });
 
 console.log(myObserver.state.foo); //"bar"
 ```
@@ -36,6 +54,33 @@ const myObserver = new Observer({
 
 function App() {
   const { random, setRandom } = useObserver(myObserver);
+
+  return (
+    <>
+      <p>{random}</p>
+      <button onClick={generate}>Generate</button>
+    </>
+  );
+
+  function generate() {
+    setRandom(Math.random() * 1000);
+  }
+}
+```
+
+```tsx
+import { Observer, useObserver } from 'rosma';
+
+type State = {
+  random: string | number;
+};
+
+const myObserver = new Observer<State>({
+  random: 'Click Generate to generate random number',
+});
+
+function App() {
+  const { random, setRandom } = useObserver<State>(myObserver);
 
   return (
     <>
@@ -80,6 +125,44 @@ export function useDataObserver() {
 }
 ```
 
+```ts
+import { Observer, useObserver } from 'rosma';
+
+type UIState = {
+  mustShowSidebar: boolean;
+};
+
+type AuthState = {
+  user?: User;
+  token?: string;
+};
+
+type DataState = {
+  posts: Post[];
+  users: User[];
+};
+
+const initialUIState: UIState = { mustShowSidebar: true };
+const initialAuthState: AuthState = { user: undefined, token: undefined };
+const initialDataState: DataState = { posts: [], users: [] };
+
+export const UIObserver = new Observer<UIState>(initialUIState);
+export const authObserver = new Observer<AuthState>(initialAuthState);
+export const dataObserver = new Observer<DataState>(initialDataState);
+
+export function useUIObserver() {
+  return useObserver<UIState>(UIObserver);
+}
+
+export function useAuthObserver() {
+  return useObserver<AuthState>(authObserver);
+}
+
+export function useDataObserver() {
+  return useObserver<DataState>(dataObserver);
+}
+```
+
 multipleObservers.useObserver.explain
 
 ## Separating observers
@@ -102,9 +185,33 @@ export function useUIObserver() {
 }
 ```
 
+```ts
+import { Observer, useObserver } from 'rosma';
+
+type UIState = {
+  mustShowSidebar: boolean;
+};
+
+const initialUIState: UIState = { mustShowSidebar: true };
+
+export const UIObserver = new Observer<UIState>(initialUIState);
+
+export function useUIObserver() {
+  return useObserver<UIState>(UIObserver);
+}
+```
+
 **src/observers/ui/actions.ts**
 
 ```js
+import { UIObserver } from './observer';
+
+export function toggleSidebar() {
+  UIObserver.set({ mustShowSidebar: !UIObserver.state.mustShowSidebar });
+}
+```
+
+```ts
 import { UIObserver } from './observer';
 
 export function toggleSidebar() {
@@ -128,9 +235,42 @@ export function useAuthObserver() {
 }
 ```
 
+```ts
+import { Observer, useObserver } from 'rosma';
+
+type AuthState = {
+  user?: User;
+  token?: string;
+};
+
+const initialAuthState: AuthState = { user: undefined, token: undefined };
+
+export const authObserver = new Observer<AuthState>(initialAuthState);
+
+export function useAuthObserver() {
+  return useObserver<AuthState>(authObserver);
+}
+```
+
 **src/observers/auth/actions.ts**
 
 ```js
+import { authObserver } from './observer';
+
+export function login({ username, password }) {
+  // logics for login
+
+  authObserver.set({ user, token });
+}
+
+export function logout() {
+  // logics for logout
+
+  authObserver.set({ user: undefined, token: undefined });
+}
+```
+
+```ts
 import { authObserver } from './observer';
 
 export function login({ username, password }) {
@@ -162,9 +302,42 @@ export function useDataObserver() {
 }
 ```
 
+```ts
+import { Observer, useObserver } from 'rosma';
+
+type DataState = {
+  posts: Post[];
+  users: User[];
+};
+
+const initialDataState: DataState = { posts: [], users: [] };
+
+export const dataObserver = new Observer<DataState>(initialDataState);
+
+export function useDataObserver() {
+  return useObserver<DataState>(dataObserver);
+}
+```
+
 **src/observers/data/actions.ts**
 
 ```js
+import { dataObserver } from './observer';
+
+export function getPosts() {
+  // logics for getting posts
+
+  dataObserver.set({ posts });
+}
+
+export function getUsers() {
+  // logics for getting users
+
+  dataObserver.set({ users });
+}
+```
+
+```ts
 import { dataObserver } from './observer';
 
 export function getPosts() {

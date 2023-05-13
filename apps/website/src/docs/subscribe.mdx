@@ -37,6 +37,33 @@ export function Component() {
 }
 ```
 
+```tsx
+import { observer, useObserver } from 'rosma';
+
+type State = {
+  time: string;
+};
+
+observer.subscribe<State>('time', listener);
+
+function listener(time: State['time']) {
+  alert('The time is ' + time);
+}
+
+export function Component() {
+  const { time, setTime } = useObserver<State>();
+
+  return (
+    <div>
+      <p>{time}</p>
+      <button onClick={() => setTime(new Date().toLocaleTimeString())}>
+        Click to update
+      </button>
+    </div>
+  );
+}
+```
+
 <Component />
 
 subscribe.outside.description
@@ -56,6 +83,38 @@ export function Component2() {
     const unsubscribe = observer.subscribe('time', listener);
 
     function listener(time) {
+      alert('The time is ' + time);
+    }
+
+    return () => unsubscribe();
+  }, []);
+
+  return (
+    <div>
+      <p>{time}</p>
+      <button onClick={() => setTime(new Date().toLocaleTimeString())}>
+        Click to update
+      </button>
+    </div>
+  );
+}
+```
+
+```tsx
+import { useEffect } from 'react';
+import { observer, useObserver } from 'rosma';
+
+type State = {
+  time: string;
+};
+
+export function Component2() {
+  const { time, setTime } = useObserver<State>();
+
+  useEffect(() => {
+    const unsubscribe = observer.subscribe<State>('time', listener);
+
+    function listener(time: State['time']) {
       alert('The time is ' + time);
     }
 
@@ -118,6 +177,50 @@ export function App() {
 }
 ```
 
+```tsx
+import { observer, useObserver } from 'rosma';
+
+type State = {
+  random1: number;
+  random2: number;
+};
+
+observer.subscribe<State>(['random1', 'random2'], listener);
+
+function listener({ random1, random2 }: State) {
+  alert(`Random1: ${random1},\nRandom2: ${random2}`);
+}
+
+function Component1() {
+  const { random1, setRandom1 } = useObserver<State>();
+
+  return (
+    <button onClick={() => setRandom1(Math.random())}>
+      {random1 || 'Random1'}
+    </button>
+  );
+}
+
+function Component2() {
+  const { random2, setRandom2 } = useObserver<State>();
+
+  return (
+    <button onClick={() => setRandom2(Math.random())}>
+      {random2 || 'Random2'}
+    </button>
+  );
+}
+
+export function App() {
+  return (
+    <>
+      <Component1 />
+      <Component2 />
+    </>
+  );
+}
+```
+
 <App />
 
 subscribe.multiple.explain
@@ -138,20 +241,66 @@ function listener({ random1, random2 }) {
 }
 
 function Component1() {
-  const { random1, setrandom1 } = useObserver();
+  const { random1, setRandom1 } = useObserver();
 
   return (
-    <button onClick={() => setrandom1(Math.random())}>
+    <button onClick={() => setRandom1(Math.random())}>
       {random1 || 'random1'}
     </button>
   );
 }
 
 function Component2() {
-  const { random2, setrandom2 } = useObserver();
+  const { random2, setRandom2 } = useObserver();
 
   return (
-    <button onClick={() => setrandom2(Math.random())}>
+    <button onClick={() => setRandom2(Math.random())}>
+      {random2 || 'Random2'}
+    </button>
+  );
+}
+
+export function App() {
+  return (
+    <>
+      <Component1 />
+      <Component2 />
+    </>
+  );
+}
+```
+
+```tsx
+import { observer, useObserver } from 'rosma';
+
+type State = {
+  random1: number;
+  random2: number;
+};
+
+observer.subscribe('*', listener);
+
+function listener({ random1, random2 }: State) {
+  if ((random1 || random2) === undefined) return;
+
+  alert(`Random1: ${random1},\nRandom2: ${random2}`);
+}
+
+function Component1() {
+  const { random1, setRandom1 } = useObserver<State>();
+
+  return (
+    <button onClick={() => setRandom1(Math.random())}>
+      {random1 || 'random1'}
+    </button>
+  );
+}
+
+function Component2() {
+  const { random2, setRandom2 } = useObserver<State>();
+
+  return (
+    <button onClick={() => setRandom2(Math.random())}>
       {random2 || 'Random2'}
     </button>
   );

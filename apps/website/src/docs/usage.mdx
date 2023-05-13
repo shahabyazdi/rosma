@@ -8,11 +8,30 @@ export const meta = {
 
 usage.counter.description
 
-```javascript
+```jsx
 import { useObserver } from 'rosma';
 
 export default function Counter() {
   const { count, setCount } = useObserver(0);
+
+  return (
+    <button onClick={() => setCount(count + 1)}>
+      <span>the count is: </span>
+      {count}
+    </button>
+  );
+}
+```
+
+```tsx
+import { useObserver } from 'rosma';
+
+type State = {
+  count: number;
+};
+
+export default function Counter() {
+  const { count, setCount } = useObserver<State>(0);
 
   return (
     <button onClick={() => setCount(count + 1)}>
@@ -29,6 +48,16 @@ usage.counter.alt
 import { withState } from 'rosma';
 
 function Counter({ count = 0, setCount }) {
+  return <button onClick={() => setCount(count + 1)}>{count}</button>;
+}
+
+export default withState(Counter);
+```
+
+```tsx
+import { withState, WithSetters } from 'rosma';
+
+function Counter({ count = 0, setCount }: WithSetters<{ count: number }>) {
   return <button onClick={() => setCount(count + 1)}>{count}</button>;
 }
 
@@ -57,6 +86,20 @@ export default function Counter() {
 }
 ```
 
+```tsx
+import { useObserver } from 'rosma';
+
+type State = {
+  count: number;
+};
+
+export default function Counter() {
+  const { setCount, count } = useObserver<State>(0);
+
+  return <button onClick={() => setCount(count + 1)}>{count}</button>;
+}
+```
+
 usage.order.explain
 
 ## Case Insensitive Variables
@@ -64,6 +107,16 @@ usage.order.explain
 usage.caseinsensitive.description
 
 ```jsx
+import { useObserver } from 'rosma';
+
+export default function Counter() {
+  const { CouNt, setcOunT } = useObserver(0);
+
+  return <button onClick={() => setcOunT(CouNt + 1)}>{CouNt}</button>;
+}
+```
+
+```tsx
 import { useObserver } from 'rosma';
 
 export default function Counter() {

@@ -27,7 +27,7 @@ export type WithSetters<T> = T extends object
         value: Setter<T[K]>
       ) => void;
     } & T & {
-        set: (
+        set?: (
           values: ObserverValues<T, Record<string, any>>,
           options?: SetOptions
         ) => void;

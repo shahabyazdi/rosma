@@ -12,7 +12,7 @@ initialValues.description
 
 initialValues.once.description
 
-```javascript
+```jsx
 import { observer, useObserver } from 'rosma';
 
 observer.set({ count: 10, count1: 20 });
@@ -29,12 +29,34 @@ export default function Counts() {
 }
 ```
 
+```tsx
+import { observer, useObserver } from 'rosma';
+
+type State = {
+  count: number;
+  count1: number;
+};
+
+observer.set<State>({ count: 10, count1: 20 });
+
+export default function Counts() {
+  const { count, setCount, count1, setCount1 } = useObserver<State>();
+
+  return (
+    <>
+      <button onClick={() => setCount(count + 1)}>{count}</button>
+      <button onClick={() => setCount1(count1 + 1)}>{count1}</button>
+    </>
+  );
+}
+```
+
 initialValues.once.explain
 
 **2. Assign initial values to the variable itself:**
 
-```javascript
-import { observer, useObserver } from 'rosma';
+```jsx
+import { useObserver } from 'rosma';
 
 export default function Counts() {
   const { count = 10, setCount, count1 = 20, setCount1 } = useObserver();
@@ -48,14 +70,55 @@ export default function Counts() {
 }
 ```
 
+```tsx
+import { useObserver } from 'rosma';
+
+type State = {
+  count: number;
+  count1: number;
+};
+
+export default function Counts() {
+  const { count = 10, setCount, count1 = 20, setCount1 } = useObserver<State>();
+
+  return (
+    <>
+      <button onClick={() => setCount(count + 1)}>{count}</button>
+      <button onClick={() => setCount1(count1 + 1)}>{count1}</button>
+    </>
+  );
+}
+```
+
 **3. Define initial values separately:**
 
-```javascript
+```jsx
 import { useObserver } from 'rosma';
 
 export default function Counts() {
   const { count, setCount } = useObserver(10);
   const { count1, setCount1 } = useObserver(20);
+
+  return (
+    <>
+      <button onClick={() => setCount(count + 1)}>{count}</button>
+      <button onClick={() => setCount1(count1 + 1)}>{count1}</button>
+    </>
+  );
+}
+```
+
+```tsx
+import { useObserver } from 'rosma';
+
+type State = {
+  count: number;
+  count1: number;
+};
+
+export default function Counts() {
+  const { count, setCount } = useObserver<State>(10);
+  const { count1, setCount1 } = useObserver<State>(20);
 
   return (
     <>

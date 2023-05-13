@@ -26,8 +26,8 @@ class Observer<T = Record<string, any>> {
     }
   }
 
-  subscribe<K extends keyof T>(
-    key: StarOrKey<K> | Array<StarOrKey<K>>,
+  subscribe<StateType extends T>(
+    key: StarOrKey<keyof StateType> | Array<keyof StateType>,
     listener: Listener
   ) {
     if (typeof listener !== 'function') {
@@ -36,11 +36,13 @@ class Observer<T = Record<string, any>> {
       return () => false;
     }
 
-    if (!Array.isArray(key)) key = [key];
+    const list = Array.isArray(key)
+      ? Array.from(new Set(key)).filter((key) => key !== '*')
+      : [key];
 
     this.#addListener(listener);
 
-    const keys = key.map(toLowerCase);
+    const keys = list.map(toLowerCase);
 
     keys.forEach((key) => {
       this.#createCache(key);
@@ -81,7 +83,7 @@ class Observer<T = Record<string, any>> {
     return keys;
   }
 
-  get<K extends keyof T>(key: K | Array<K>) {
+  get<StateType extends T>(key: keyof StateType | Array<keyof StateType>) {
     return typeof key === 'string'
       ? this.#state[key.toLowerCase()]
       : Array.isArray(key)
