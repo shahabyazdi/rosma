@@ -1,10 +1,16 @@
 import { useState, useEffect, useRef } from 'react';
 import { Observer, observer as globalObserver } from '../observer';
-import { ObserverValues, SetOptions, WithSetters } from '../types';
+import {
+  ObserverValues,
+  SetOptions,
+  WithSetters,
+  GlobalState,
+  GlobalStatics,
+} from '../types';
 
-export function useObserver<T = Record<string, any>>(
+export function useObserver<T = GlobalState, Statics = GlobalStatics>(
   input = undefined
-): WithSetters<T> {
+): WithSetters<T> & Statics {
   const isObserverInstance = input instanceof Observer,
     initialValue = isObserverInstance ? undefined : input,
     observer = isObserverInstance ? input : globalObserver,
@@ -49,6 +55,7 @@ export function useObserver<T = Record<string, any>>(
           };
         } else {
           if (target[key]) return target[key];
+          if (observer.statics[key]) return observer.statics[key];
 
           keys.add(prop);
 
@@ -61,7 +68,7 @@ export function useObserver<T = Record<string, any>>(
         return true;
       },
     }
-  ) as WithSetters<T>;
+  ) as WithSetters<T> & Statics;
 
   function setValue(key: string) {
     let value = observer.get(key);

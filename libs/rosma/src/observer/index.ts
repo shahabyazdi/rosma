@@ -4,16 +4,33 @@ import {
   ObserverValues,
   SetOptions,
   StarOrKey,
+  BindObserver,
+  GlobalState,
+  GlobalStatics,
 } from '../types';
 
-class Observer<T = Record<string, any>> {
+class Observer<T = Record<string, any>, S = Record<string, any>> {
   #cache: Record<string, CacheData> = {};
   #listeners = new Map<Listener, Set<string>>();
   #state = {};
+  statics = {} as S;
 
-  constructor(initialValues?: T) {
+  constructor(initialValues?: T, statics?: BindObserver<S, T>) {
     this.#createCache('*');
     this.#setValues(initialValues);
+    this.setStatics(statics);
+  }
+
+  setStatics(statics?: BindObserver<S, T>) {
+    if (typeof statics === 'object') {
+      Object.entries(statics).forEach(([key, value]) => {
+        if (typeof value === 'function') {
+          this.statics[key] = value.bind(this);
+        } else {
+          this.statics[key] = value;
+        }
+      });
+    }
   }
 
   #createCache(key: string) {
@@ -72,7 +89,7 @@ class Observer<T = Record<string, any>> {
   #setValues(object) {
     if (typeof object !== 'object') return;
 
-    const originalKeys = Object.keys(object);
+    const originalKeys = Object.keys(object).filter((i) => !this.statics[i]);
     const keys = originalKeys.map(toLowerCase);
 
     keys.forEach((key, index) => {
@@ -83,13 +100,17 @@ class Observer<T = Record<string, any>> {
     return keys;
   }
 
-  get<StateType extends T>(key: keyof StateType | Array<keyof StateType>) {
+  get<StateType extends T & S>(key: keyof StateType | Array<keyof StateType>) {
+    const getValue = (key: string | number | symbol) => {
+      key = key.toString();
+
+      return this.statics[key] || this.#state[key.toLowerCase()];
+    };
+
     return typeof key === 'string'
-      ? this.#state[key.toLowerCase()]
+      ? getValue(key)
       : Array.isArray(key)
-      ? Object.fromEntries(
-          key.map((key) => [key, this.#state[toLowerCase(key)]])
-        )
+      ? Object.fromEntries(key.map((key) => [key, getValue(key)]))
       : undefined;
   }
 
@@ -126,7 +147,7 @@ class Observer<T = Record<string, any>> {
   }
 }
 
-const observer = new Observer();
+const observer = new Observer<GlobalState, GlobalStatics>();
 
 export { Observer, observer };
 

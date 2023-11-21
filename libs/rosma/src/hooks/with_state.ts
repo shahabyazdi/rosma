@@ -1,14 +1,17 @@
 import { memo, ReactElement } from 'react';
 import { useObserver } from './use_observer';
 import { Observer } from '../observer';
-import { WithSetters } from '../types';
+import { WithSetters, GlobalState, GlobalStatics } from '../types';
 
 export function withState<
-  StateProps extends Record<string, any>,
-  ComponentProps extends Record<string, any> = Record<string, any>
+  StateProps = GlobalState,
+  ComponentProps extends Record<string, any> = Record<string, any>,
+  StaticProps = GlobalStatics
 >(
-  callback: (state?: WithSetters<StateProps> & ComponentProps) => ReactElement,
-  observer?: Observer
+  callback: (
+    state?: WithSetters<StateProps> & ComponentProps & StaticProps
+  ) => ReactElement,
+  observer?: Observer<StateProps, StaticProps>
 ) {
   function Element(props) {
     const state = useObserver<StateProps>(observer);
@@ -20,7 +23,9 @@ export function withState<
       )
     );
 
-    return callback(state as WithSetters<StateProps> & ComponentProps);
+    return callback(
+      state as WithSetters<StateProps> & ComponentProps & StaticProps
+    );
   }
 
   return memo<ComponentProps>(Element);

@@ -1,6 +1,25 @@
 import { observer, useObserver } from 'rosma';
+import { Modal } from '../../types/global';
+
+observer.setStatics({
+  newModal({ id, body, title }) {
+    const modals = this.state.modals;
+    const modal = { id: id ?? modals.length + 1, title, body };
+
+    modals.push(modal);
+
+    this.set({ modals });
+  },
+  closeModal(id) {
+    const modals = this.state.modals;
+
+    this.set({ modals: modals.filter((modal) => modal.id !== id) });
+  },
+});
 
 export function App() {
+  const { newModal } = useObserver();
+
   return (
     <>
       <button
@@ -16,10 +35,18 @@ export function App() {
 function Modals() {
   const { modals } = useObserver([]);
 
-  return modals.map((modal, index) => <Modal key={index} {...modal} />);
+  return (
+    <>
+      {modals.map((modal, index) => (
+        <Modal key={index} {...modal} />
+      ))}
+    </>
+  );
 }
 
-function Modal({ title, body, id }) {
+function Modal({ title, body, id }: Modal) {
+  const { closeModal } = useObserver([]);
+
   return (
     <div
       style={{
@@ -50,24 +77,4 @@ function Modal({ title, body, id }) {
       <div style={{ padding: '10px' }}>{body}</div>
     </div>
   );
-}
-
-function newModal({ title, body }) {
-  const modals = observer.get('modals') || [];
-
-  const modal = {
-    id: modals.length + 1,
-    title,
-    body,
-  };
-
-  modals.push(modal);
-
-  observer.set({ modals });
-}
-
-function closeModal(id) {
-  const modals = observer.get('modals') || [];
-
-  observer.set({ modals: modals.filter((modal) => modal.id !== id) });
 }

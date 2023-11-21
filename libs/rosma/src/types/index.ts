@@ -1,3 +1,5 @@
+import { Observer } from '../observer';
+
 export type Listener = (value: any) => void;
 
 export type PartialValues<S, T> = Partial<S extends object ? S : T>;
@@ -33,3 +35,14 @@ export type WithSetters<T> = T extends object
         ) => void;
       }
   : T;
+
+export type BindObserver<T, O> = {
+  [K in keyof T]: T[K] extends (...args: any[]) => any
+    ? (this: Observer<O>, ...args: Parameters<T[K]>) => ReturnType<T[K]>
+    : T[K];
+};
+
+// eslint-disable-next-line
+export interface GlobalState extends Record<string, any> {}
+// eslint-disable-next-line
+export interface GlobalStatics {}
