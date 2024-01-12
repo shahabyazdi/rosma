@@ -14,6 +14,8 @@ type State = {
   translate: (key: string) => string;
   isSidebarActive: boolean;
   lang: 'js' | 'ts';
+  number?: number;
+  strTime?: string;
 };
 
 type Statics = {

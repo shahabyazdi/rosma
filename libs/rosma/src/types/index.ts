@@ -38,7 +38,7 @@ export type WithSetters<T> = T extends object
 
 export type BindObserver<T, O> = {
   [K in keyof T]: T[K] extends (...args: any[]) => any
-    ? (this: Observer<O>, ...args: Parameters<T[K]>) => ReturnType<T[K]>
+    ? (this: Observer<O, T>, ...args: Parameters<T[K]>) => ReturnType<T[K]>
     : T[K];
 };
 

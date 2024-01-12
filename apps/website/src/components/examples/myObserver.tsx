@@ -1,11 +1,13 @@
 import { Observer, useObserver } from 'rosma';
 
+type State = { random: string | number };
+
 const myObserver = new Observer({
   random: 'Click Generate to generate random number',
 });
 
 export function MyObserver() {
-  const { random, setRandom } = useObserver(myObserver);
+  const { random, setRandom } = useObserver<State>(myObserver);
 
   return (
     <>

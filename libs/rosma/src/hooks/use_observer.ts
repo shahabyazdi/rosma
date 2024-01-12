@@ -35,6 +35,8 @@ export function useObserver<T = GlobalState, Statics = GlobalStatics>(
     {},
     {
       get(target, key: string) {
+        if (observer.statics[key]) return observer.statics[key];
+
         const { keys } = ref.current;
 
         const prop = key.toLowerCase();
@@ -55,7 +57,6 @@ export function useObserver<T = GlobalState, Statics = GlobalStatics>(
           };
         } else {
           if (target[key]) return target[key];
-          if (observer.statics[key]) return observer.statics[key];
 
           keys.add(prop);
 

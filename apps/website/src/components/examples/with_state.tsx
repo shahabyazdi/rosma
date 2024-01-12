@@ -1,25 +1,28 @@
 import { useState } from 'react';
-import { withState, Observer, WithSetters } from 'rosma';
+import {
+  withState,
+  Observer,
+  WithSetters,
+  GlobalState,
+  GlobalStatics,
+} from 'rosma';
 
-function CountNumbers({ number = 0, setNumber }) {
+function CountNumbers({
+  number = 0,
+  setNumber,
+}: WithSetters<GlobalState> & GlobalStatics) {
   return <button onClick={() => setNumber(number + 1)}>{number}</button>;
 }
 
 export default withState(CountNumbers);
 
-const ComponentA = withState(
-  ({
-    number = 0,
-    setNumber,
-    strTime,
-  }: WithSetters<{ number?: number; strTime?: string }>) => (
-    <div style={{ backgroundColor: '#efefef', padding: '5px' }}>
-      <p style={{ fontWeight: 'bold' }}>Component A</p>
-      <button onClick={() => setNumber(number + 1)}>Count is: {number}</button>
-      <p>Time is: {strTime}</p>
-    </div>
-  )
-);
+const ComponentA = withState(({ number = 0, setNumber, strTime }) => (
+  <div style={{ backgroundColor: '#efefef', padding: '5px' }}>
+    <p style={{ fontWeight: 'bold' }}>Component A</p>
+    <button onClick={() => setNumber(number + 1)}>Count is: {number}</button>
+    <p>Time is: {strTime}</p>
+  </div>
+));
 
 export function ComponentB() {
   const [strTime, setStrTime] = useState('');
