@@ -14,7 +14,7 @@ export function withState<
   observer?: Observer<StateProps, StaticProps>
 ) {
   function Element(props) {
-    const state = useObserver<StateProps>(observer);
+    const state = useObserver<StateProps, StaticProps>(observer);
 
     Object.defineProperties(
       state,

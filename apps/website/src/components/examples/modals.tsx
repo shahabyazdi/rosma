@@ -8,7 +8,7 @@ observer.setStatics({
 
     modals.push(modal);
 
-    this.set({ modals });
+    this.set({ modals: [...modals] });
   },
   closeModal(id) {
     const modals = this.state.modals;

@@ -14,21 +14,27 @@ export function useObserver<T = GlobalState, Statics = GlobalStatics>(
   const isObserverInstance = input instanceof Observer,
     initialValue = isObserverInstance ? undefined : input,
     observer = isObserverInstance ? input : globalObserver,
-    state = useState({}),
+    [state, setState] = useState({ value: {} }),
     ref = useRef({ keys: new Set<string>() });
 
   useEffect(() => {
-    const { keys } = ref.current;
+    const keys = Array.from(ref.current.keys);
 
-    if (keys.size === 0) return;
+    if (keys.length === 0) return;
 
-    const unsubscribe = observer.subscribe(Array.from(keys), listener);
+    const value = observer.get(keys);
 
-    function listener(value) {
-      state[1]({ value });
-    }
+    setState((prev) => {
+      if (
+        Object.entries(value).some(([key, value]) => prev.value[key] !== value)
+      ) {
+        return { value };
+      }
 
-    return () => unsubscribe();
+      return prev;
+    });
+
+    return observer.subscribe(keys, (value) => setState({ value }));
   }, []);
 
   return new Proxy(
@@ -79,6 +85,8 @@ export function useObserver<T = GlobalState, Statics = GlobalStatics>(
 
       observer.set({ [key]: value });
     }
+
+    state.value[key] = value;
 
     return value;
   }

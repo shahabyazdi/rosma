@@ -1,4 +1,4 @@
-const { terser } = require('rollup-plugin-terser');
+// const { terser } = require('rollup-plugin-terser');
 
 module.exports = function (options) {
   const extraGlobals = { react: 'React' };
@@ -6,7 +6,7 @@ module.exports = function (options) {
   options.output = {
     ...options.output,
     globals: { ...options.output.globals, ...extraGlobals },
-    plugins: [terser()],
+    // plugins: [terser()],
   };
 
   return options;
