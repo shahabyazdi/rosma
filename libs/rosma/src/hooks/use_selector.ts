@@ -23,9 +23,9 @@ export function useSelector<
   ref.current = { selector, observer };
 
   useEffect(() => {
-    const { selector, observer } = ref.current;
-
-    return observer.subscribe('*', (state) => setState(selector(state)));
+    return ref.current.observer.subscribe('*', (state) =>
+      setState(ref.current.selector(state))
+    );
   }, []);
 
   return state;
